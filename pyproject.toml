@@ -1,0 +1,18 @@
+[project]
+name = "stride"
+version = "0.5.0"
+requires-python = "==3.11.9"
+dependencies = [
+    "torch",
+    "numpy",
+    "fastapi",
+    "pydantic",
+    "psycopg",
+    "langchain",
+    "langgraph",
+    "langchain_google_genai",
+    "langchain_openai",
+    "langchain_huggingface",
+    "nltk",
+    "sentence_transformers"
+]
