@@ -1,7 +1,7 @@
 import asyncio
 from dataclasses import dataclass, asdict
 from intent_router import normalization, keyword_intent, semantic_intent
-from _init_ import get_ctx, AppStateContext
+from backend.lifespan import get_ctx, AppStateContext
 from typing import Optional, List, Dict, Any, Literal
 from enum import Enum
 from pydantic import BaseModel, Field, ValidationError

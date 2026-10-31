@@ -1,6 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
-from tools_handling import tool_call
 from dataclasses import dataclass
 from dotenv import load_dotenv
 from logging_handler import setup_logging, get_logger
