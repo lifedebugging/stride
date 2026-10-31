@@ -2,7 +2,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_openai import ChatOpenAI
 from dataclasses import dataclass
 from dotenv import load_dotenv
-from logging_handler import setup_logging, get_logger
+from config.logging_handler import setup_logging, get_logger
 from enum import Enum
 import os
 
@@ -39,10 +39,8 @@ MODEL_MAP = {
 }
 
 
-def log_routing_decision(decision: dict) -> ModelConfig:
-    """
-    Routing stats and returns model config
-    """
+def log_routing_decision(decision: dict) -> ModelTier:
+    """Log the routing decision and return its model tier."""
     category = decision["category"]
     confidence = decision["confidence"]
     model_tier_str = decision["model"]
@@ -51,17 +49,23 @@ def log_routing_decision(decision: dict) -> ModelConfig:
     try:
         tier = ModelTier(model_tier_str)
     except ValueError:
-        log.exception(f"unkown model tier '{model_tier_str}' for intent '{category}'")
+        log.exception(
+            "unknown model tier",
+            category=category,
+            model_tier=model_tier_str,
+        )
+        raise
     
     config = MODEL_MAP[tier]
-    
-    log.info("routing decision",
-            category=category,
-            confidence=confidence,
-            model_tier=tier.value,
-            model_id=config.model_name,
-            tools=tools
-            )
+    routing_fields = {
+        "category": category,
+        "confidence": confidence,
+        "model_tier": tier.value,
+        "model_id": config.model_name,
+        "tools": tools,
+    }
+
+    log.info("routing decision", **routing_fields)
     return tier
 
 
