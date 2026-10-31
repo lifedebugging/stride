@@ -8,7 +8,7 @@ from typing import List, Dict, Tuple
 from pathlib import Path
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from intent_registery import INTENT_REGISTRY
+from intent_registry import INTENT_REGISTRY
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from scipy.special import expit as sigmoid
@@ -257,14 +257,8 @@ def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
         
         """
          re.escape(string) is a function in the built-in re module used to 
-         automatically escape special characters (like *, +, ?, ., ^, $, etc.) by adding a backslash (\) before them."""
+         automatically escape special characters (like *, +, ?, ., ^, $, etc.) by adding a backslash ('\') before them."""
         
-                    
-        # priority = int(data.get("priority", 5)) 
-        # print(len(filtered_token))
-        # if len(filtered_token) == 0:
-            
-        #     return []
         
         # Find the confidence
         confidence = sum(score) / len(filtered_token)        
