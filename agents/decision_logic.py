@@ -34,10 +34,10 @@ class IntentResult:
     
 def classify_query_length(query : str) -> QueryLength:
     words = len(query.split())
-    if not words <=10:
-        return QueryLength.MEDIUM
     if not words <= 50:
         return QueryLength.LONG
+    if not words <=10:
+        return QueryLength.MEDIUM
     return QueryLength.SHORT
     
 
