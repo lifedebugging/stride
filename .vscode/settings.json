@@ -1,6 +1,8 @@
 {
     "python.analysis.extraPaths": [
-        "${workspaceFolder}"
+        "${workspaceFolder}/main",
+        "${workspaceFolder}/backend", 
+        "${workspaceFolder}./config",
     ],
     "python-envs.defaultEnvManager": "ms-python.python:system"
 }
