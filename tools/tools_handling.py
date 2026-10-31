@@ -1,7 +1,7 @@
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from pathlib import Path
-from error_handler import retry_with_backoff
-from logging_handler import get_logger
+from config.error_handler import retry_with_backoff
+from config.logging_handler import get_logger
 import asyncio
 import sys
 
