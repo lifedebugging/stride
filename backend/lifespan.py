@@ -5,7 +5,7 @@ from fasttext import load_model
 from pydantic import BaseModel, ConfigDict
 from psycopg_pool import AsyncConnectionPool, PoolTimeout, PoolClosed, TooManyRequests  #use too many requests
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
-from model_config import model_endpoint,  MODEL_MAP
+from model_config import model_endpoint, MODEL_MAP
 from langchain.agents import create_agent
 from system_prompt import ReadOnly
 from tools_handling import tool_call
