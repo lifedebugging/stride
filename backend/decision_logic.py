@@ -1,12 +1,12 @@
 import asyncio
 from dataclasses import dataclass, asdict
-from intent_router import normalization, keyword_intent, semantic_intent
+from routers.intent_router import normalization, keyword_intent, semantic_intent
 from backend.lifespan import get_ctx, AppStateContext
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, List, Dict, Any, Literal, Callable
 from enum import Enum
 from pydantic import BaseModel, Field, ValidationError
-from model_config import classifier_endpoint
-from logging_handler import get_logger
+from config.model_config import classifier_endpoint
+from config.logging_handler import get_logger
 
 log = get_logger("decision_logic")
 
@@ -46,7 +46,13 @@ async def safe_llm_classifier(query : str,
                               timeout : float = 3.0
                               ) -> StrictOutput:
     try:
-        llm_classifier = classifier_endpoint().with_structured_output(StrictOutput)
+        endpoint = classifier_endpoint()
+        
+        if endpoint is None:
+            log.error("Classifier endpoint is not configured")
+            
+
+        llm_classifier = endpoint.with_structured_output(StrictOutput)
         
         return await asyncio.wait_for(
             llm_classifier.ainvoke(query),
@@ -105,7 +111,7 @@ async def resolve_intent(
         try:
             return asdict(_pack(classifier_result.model_dump(), "llm"))
         except Exception as e:
-            return f"classifier failed to fetch intent: {e}"
+            log.exception(f"classifier failed to fetch intent: {e}")
         
         
     
@@ -143,7 +149,7 @@ def predict_language(text: str,
     return [l.replace("__label__", "") for l in label]
 
 
-async def IntentCall(func : callable, 
+async def IntentCall(func: Callable[..., Any],
                                    *args, 
                                    timeout,
                                    log_label = None,
