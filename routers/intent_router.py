@@ -8,7 +8,7 @@ from typing import List, Dict, Tuple
 from pathlib import Path
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from intent_registry import INTENT_REGISTRY
+from utils.intent_registry import INTENT_REGISTRY
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from scipy.special import expit as sigmoid
@@ -16,7 +16,7 @@ from langchain_classic.retrievers import EnsembleRetriever
 from langchain_core.vectorstores import InMemoryVectorStore
 from langchain_huggingface import HuggingFaceEmbeddings
 from sentence_transformers import CrossEncoder
-from logging_handler import get_logger
+from config.logging_handler import get_logger
 import time
 
 log = get_logger("router logic")
@@ -26,11 +26,9 @@ This is a json file used as a dataset
 in semantic router
 """
 
-CURRENT_DIR = Path(__file__).resolve().parent
+DATASET_DIR = Path('D:/Documents/stride/utils/semantic_registry.json')
 
-MODEL_PATH = CURRENT_DIR / "semantic_registry.json"
-
-with open(MODEL_PATH, 'r', encoding='utf-8') as file:
+with open(DATASET_DIR, 'r', encoding='utf-8') as file:
     semantic_dataset  = json.load(file)
     
 # stopwords

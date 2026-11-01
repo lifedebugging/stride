@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 from config.logging_handler import setup_logging, get_logger
 from enum import Enum
+from pydantic import SecretStr
+
 import os
 
 load_dotenv()
@@ -89,7 +91,7 @@ def model_endpoint(tier):
         groq_model = ChatOpenAI(
             model=config.model_name,
             api_key=os.getenv("GROQ_API_KEY"),
-            base_url="https://api.groq.com/openai/v1",
+            base_url="https://api.groq.com/openai/v2",
             temperature=config.temperature
         )
         try:

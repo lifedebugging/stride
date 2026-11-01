@@ -1,4 +1,3 @@
-
 import structlog
 from structlog.processors import CallsiteParameter
 import logging
