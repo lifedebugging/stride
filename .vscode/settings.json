@@ -4,5 +4,14 @@
         "${workspaceFolder}/backend", 
         "${workspaceFolder}./config",
     ],
-    "python-envs.defaultEnvManager": "ms-python.python:system"
+    
+    "python.analysis.exclude": [
+        "logs/**/*.md",
+        "**/logs/**"
+    ],
+
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    
+    
+    
 }
