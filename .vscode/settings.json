@@ -3,6 +3,7 @@
         "${workspaceFolder}/main",
         "${workspaceFolder}/backend", 
         "${workspaceFolder}./config",
+        "D:/Documents/stride"
     ],
     
     "python.analysis.exclude": [
@@ -10,7 +11,11 @@
         "**/logs/**"
     ],
 
-    "python-envs.defaultEnvManager": "ms-python.python:system",
+    
+    "python.defaultInterpreterPath": "D:/Documents/stride_venv/.venv/Scripts/python.exe",
+    "pyright.pythonPath": "D:/Documents/stride_venv/.venv/Scripts/python.exe",
+    
+    "python-envs.defaultEnvManager": "ms-python.python:venv",
     
     
     

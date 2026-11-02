@@ -1,0 +1,12 @@
+{
+    "pythonPath": "d:/Documents/stride_venv/.venv/Scripts/python.exe",
+    "include": [
+        "."
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__",
+        ".git",
+        "stride_venv"
+    ]
+}
