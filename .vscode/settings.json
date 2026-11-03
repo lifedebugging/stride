@@ -12,9 +12,10 @@
     ],
 
     
-        "python.languageServer": "Pylance",
-        "python.analysis.diagnosticMode": "off",
-        "pyright.enable": true,
+    "python.languageServer": "Pylance",
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.typeCheckingMode": "standard",
+    "pyright.enable": true,
     
     
     "python.defaultInterpreterPath": "D:/Documents/stride_venv/.venv/Scripts/python.exe",
