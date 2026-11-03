@@ -924,3 +924,24 @@ Updated IN: model_config os.getenv to pydantic class with Basesettings which see
 
 The debugger has green lit all type checker green lit moving to new file
 
+
+# 3/11 
+
+CHROMA DB I was fixing the path and I was thinking about pinecone I just wanted to try it once
+
+and since CHROMA DB is built for local development and prototyping i think its good time to transit to **Pinecone**
+
+Well CHROMA was good literally zero configuration just install chromadb 
+
+since Pinecone is **CLOUD NATIVE** Vector DB
+
+i may have to setup API keys
+
+and just MAYBEEE pinecone could be overkill for what I am doing but that's fine we are doing this for the sake of "trying" it out
+for testing.
+
+IDK much about Pinecone but hopefully i won't see any performance and latency overhead still we will see since API is involved i gotta check out how it works but that will be after deployment
+
+~ marked for after deployment
+#######################################################################################
+
