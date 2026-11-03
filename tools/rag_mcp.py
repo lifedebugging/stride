@@ -22,27 +22,27 @@ from langchain_chroma import Chroma
 from langchain_classic.retrievers import EnsembleRetriever
 
 # Local imports
-from error_handler import retry_with_backoff
+from config.error_handler import retry_with_backoff
 from mcp.server.fastmcp import FastMCP
-from model_config import model_endpoint, ModelTier
-from logging_handler import get_logger
+from config.model_config import model_endpoint, ModelTier
+from config.logging_handler import get_logger
 
 # CONFIGURATION & INITIALIZATION
 logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 load_dotenv(override=True)
 
-os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
-os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN")
-
+# TOOL NAME
 mcp = FastMCP("rag_subagent")
 
+# LOG INSTANTIATION
 log = get_logger("mcp/rag")
 
 # LLM CONFIGURATION
 llm = model_endpoint(ModelTier.fast)
 
-
+# VECTOR STORE FILE ABSOLUTE PATH
+CURRENT_DIR = Path(__file__).resolve().parent.parent
+VECTORDB_DIR = CURRENT_DIR / "config" / "chroma.sqlite3" 
 
 # DOCUMENT INDEXING & RETRIEVAL
 def Indexing():
@@ -73,7 +73,7 @@ def Indexing():
     vector_store = Chroma(
         collection_name="example_collection",
         embedding_function=embeddings,
-        persist_directory=Path(r"D:/Documents/Project_x/x v5"),
+        persist_directory= str(VECTORDB_DIR)
     )
 
     if os.path.exists(Path(r"D:/Documents/Project_x/x v5/chroma.sqlite3")):
@@ -130,10 +130,9 @@ async def search_docs(query: str) -> str:
 
         return "\n\n".join(chunks)
     except Exception as e:
-        log.error("search_docs retriever failed", error=str(e))
+        log.exception("search_docs retriever failed", error=str(e))
 
 # AGENT CONFIGURATION
-
 agent = create_agent(
     model=llm,
     tools=[search_docs],
@@ -170,13 +169,14 @@ async def rag(query) -> str:
     @retry_with_backoff()
     async def response_func():
         try:
-            response = await agent.ainvoke(
+            result = await agent.ainvoke(
                 {"messages": [HumanMessage(content=query)]}
             )
         except ValueError as e:
-            log.error("rag agent invoke failed", error= str(e))
+            log.exception("rag agent invoke failed", error= str(e))
+            raise
 
-        final_response = response["messages"][-1]
+        final_response = result["messages"][-1]
         content = final_response.content
         if isinstance(content, list):
             return " ".join(block["text"] for block in content if block.get("type") == "text")
