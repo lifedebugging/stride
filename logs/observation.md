@@ -942,6 +942,8 @@ for testing.
 
 IDK much about Pinecone but hopefully i won't see any performance and latency overhead still we will see since API is involved i gotta check out how it works but that will be after deployment
 
+or IF NOT pgvector since i m already using postgres SQL `pgvector` can be unified for now i m transitioning to that then i will later do Pinecone
+
 ~ marked for after deployment
 #######################################################################################
 
