@@ -39,7 +39,7 @@ mcp = FastMCP("rag_subagent")
 log = get_logger("mcp/rag")
 
 # LLM CONFIGURATION
-llm = cast(BaseChatModel, model_endpoint(ModelTier.fast))
+model_id = cast(BaseChatModel, model_endpoint(ModelTier.fast))
 
 # VECTOR STORE FILE ABSOLUTE PATH
 CURRENT_DIR = Path(__file__).resolve().parent.parent
@@ -121,7 +121,6 @@ async def search_docs(query: str)-> str:
     Always provide the answer from the provided documents
     Use this when you need factual information from the material you've been provided.
     """
-    global final_retriever
     try:
         result = await final_retriever.ainvoke(query)
 
@@ -142,7 +141,7 @@ async def search_docs(query: str)-> str:
 
 # AGENT CONFIGURATION
 agent = create_agent(
-    model=llm,
+    model=model_id,
     tools=[search_docs],
     system_prompt= 
     """
