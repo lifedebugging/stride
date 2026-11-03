@@ -4,14 +4,13 @@ import sys
 import logging
 import asyncio
 from pathlib import Path
-from typing import overload, cast
+from typing import cast
 
 # Third-party imports
 from dotenv import load_dotenv
 from nltk.tokenize import word_tokenize
 
 # LangChain imports
-from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
@@ -40,7 +39,7 @@ mcp = FastMCP("rag_subagent")
 log = get_logger("mcp/rag")
 
 # LLM CONFIGURATION
-llm = cast(BaseChatModel, model_endpoint(ModelTier.fast)
+llm = cast(BaseChatModel, model_endpoint(ModelTier.fast))
 
 # VECTOR STORE FILE ABSOLUTE PATH
 CURRENT_DIR = Path(__file__).resolve().parent.parent
@@ -142,7 +141,6 @@ async def search_docs(query: str)-> str:
         raise
 
 # AGENT CONFIGURATION
-@overload
 agent = create_agent(
     model=llm,
     tools=[search_docs],
