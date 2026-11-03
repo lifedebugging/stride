@@ -4,6 +4,7 @@ import sys
 import logging
 import asyncio
 from pathlib import Path
+from typing import overload, cast
 
 # Third-party imports
 from dotenv import load_dotenv
@@ -17,9 +18,10 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.retrievers import BM25Retriever
 from langchain.agents import create_agent
 from langchain_core.tools import tool
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_chroma import Chroma
 from langchain_classic.retrievers import EnsembleRetriever
+from langchain_core.language_models.chat_models import BaseChatModel
 
 # Local imports
 from config.error_handler import retry_with_backoff
@@ -38,11 +40,11 @@ mcp = FastMCP("rag_subagent")
 log = get_logger("mcp/rag")
 
 # LLM CONFIGURATION
-llm = model_endpoint(ModelTier.fast)
+llm = cast(BaseChatModel, model_endpoint(ModelTier.fast)
 
 # VECTOR STORE FILE ABSOLUTE PATH
 CURRENT_DIR = Path(__file__).resolve().parent.parent
-VECTORDB_DIR = CURRENT_DIR / "config" / "chroma.sqlite3" 
+VECTORDB_DIR = CURRENT_DIR / "config" 
 
 # DOCUMENT INDEXING & RETRIEVAL
 def Indexing():
@@ -76,7 +78,7 @@ def Indexing():
         persist_directory= str(VECTORDB_DIR)
     )
 
-    if os.path.exists(Path(r"D:/Documents/Project_x/x v5/chroma.sqlite3")):
+    if os.path.exists(Path(str(VECTORDB_DIR / "chroma.sqlite3"))):
         ensemble = build_retrievers(vector_store, splitted_documents)
         return ensemble
     else:
@@ -112,9 +114,9 @@ def build_retrievers(vector_store, splitted_documents):
 
 final_retriever = Indexing()
 
-# TOOLS
+# TOOLS DECORATOR
 @tool
-async def search_docs(query: str) -> str:
+async def search_docs(query: str)-> str:
     """
     A search tool that search the given corpus for user's query.
     Always provide the answer from the provided documents
@@ -124,19 +126,27 @@ async def search_docs(query: str) -> str:
     try:
         result = await final_retriever.ainvoke(query)
 
-        chunks = []
-        for doc in result:
-            chunks.append(doc.page_content)
-
-        return "\n\n".join(chunks)
+        # chunks = []
+        # for doc in result:
+        #     chunks.append(doc.page_content)
+        
+        # Modern clean list comprehension combined with XML tagging
+        formatted_chunks = [
+            f"<document index='{i}'>\n{doc.page_content}\n</document>"
+            for i, doc in enumerate(result)
+        ]
+        return "\n".join(formatted_chunks)
+        # return "\n\n".join(chunks)
     except Exception as e:
         log.exception("search_docs retriever failed", error=str(e))
+        raise
 
 # AGENT CONFIGURATION
+@overload
 agent = create_agent(
     model=llm,
     tools=[search_docs],
-    system_prompt=
+    system_prompt= 
     """
     Role:You're an agent with external knowledge base with context.
          You always use your tool to retrieve data from external database when user ask context speciic question
@@ -149,7 +159,7 @@ agent = create_agent(
     Output_format: Accurate, Precise and Meaningful.
                    'strictly' Paraphrase, never quote directly
                    """
-                   )
+)
 
 # MAIN RESPONSE HANDLER
 @mcp.tool()
