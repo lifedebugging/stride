@@ -34,4 +34,6 @@ dependencies = [
     "stop-words>=2025.11.4",
     "stopwords>=1.0.2",
     "structlog>=26.1.0",
+    "pgvector==0.5.1",
+    
 ]
