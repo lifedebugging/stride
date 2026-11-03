@@ -96,8 +96,8 @@ def model_endpoint(tier):
         try:
             return gemini_model
         except Exception as e:
-            log.exception(
-                f"failed to load Gemini model, error: {e}")
+            log.exception(f"failed to load Gemini model, error: {e}")
+        raise
         # i want to put here where it fallback to smaller llm if above fails
     
     if tier == ModelTier.smart:
@@ -111,8 +111,8 @@ def model_endpoint(tier):
         try:
             return groq_model
         except Exception as e:
-                log.exception(
-                    f"failed to load Groq model, error: {e}")
+            log.exception(f"failed to load Groq model, error: {e}")
+        raise
     # if this model fail flalback to fast 
      
     
@@ -134,3 +134,4 @@ def classifier_endpoint():
     except Exception as e:
         log.exception(
             f"failed to load classifier model, error: {e}")
+        raise
