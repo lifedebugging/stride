@@ -1,9 +1,9 @@
 import asyncio
 from datetime import datetime
 from mcp.server import Server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, CallToolResult
 from mcp.server.stdio import stdio_server
-from logging_handler import get_logger
+from config.logging_handler import get_logger
 
 app = Server("first-server")
 
@@ -26,15 +26,16 @@ async def execute_tool(name):
     if name == "get_datetime":
         try:
             current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            return [TextContent(type="text", 
+            return CallToolResult(content=[TextContent(type="text", 
                                 text = f"The time is {current_datetime}"
-                            )]
+                            )])
         except Exception as e:
-            log.error("datetime tool not working", error=str(e))
-            
+            log.exception("datetime tool not working", error=str(e))
+            raise       
     else:
     # Always handle the "unknown tool" case
         log.error(ValueError(f"Tool not found : {name}"))
+        raise
 
 #the Transport (The Pipes)
 async def main():
@@ -47,7 +48,8 @@ async def main():
                         app.create_initialization_options(), # These are the handshake settings
                         )
     except Exception as e:
-        log.error("tool server startup failed", error=str(e))
+        log.exception("tool server startup failed", error=str(e))
+        raise
         
 if __name__ == "__main__":
     asyncio.run(main())
