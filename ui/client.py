@@ -1,5 +1,5 @@
 import requests
-from logging_handler import get_logger
+from config.logging_handler import get_logger
 from datetime import datetime
 import time
 import uuid
@@ -28,6 +28,7 @@ def ClientChunks():
         
         except Exception as e:
             log.exception(f"client POST failed, check url: {e}")
+            raise
             
         try:
             start = time.perf_counter()
@@ -45,7 +46,8 @@ def ClientChunks():
             print()  #newline after response completes
             
         except Exception as e:
-            log.error(f"response interrupted: {e}")
+            log.exception(f"response interrupted: {e}")
+            raise
             
 client = ClientChunks()            
     
