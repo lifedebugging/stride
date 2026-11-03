@@ -49,6 +49,7 @@ try:
     
 except Exception as e:
     log.exception(f"HuggingFaceEmbedding model failure:{e}")
+    raise
     
 # encoder model
 """
@@ -90,7 +91,8 @@ try:
         embeddings,
         )
 except Exception as e:
-    log.error("vector store build failed", error=str(e))
+    log.exception("vector store build failed", error=str(e))
+    raise
 
 # retriever
 """
