@@ -4,6 +4,8 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fasttext import load_model
 from pydantic import BaseModel, ConfigDict
+from psycopg import AsyncConnection
+from psycopg.rows import DictRow, dict_row
 from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from config.model_config import model_endpoint, MODEL_MAP
@@ -31,15 +33,18 @@ class AppStateContext(BaseModel):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    
     log = get_logger("app.lifespan")
     log.info("Db connection starting up..")
+
     db_url = os.getenv("DB_URL")
     if not db_url:
         raise RuntimeError("DB_URL must be configured before starting the application.")
 
-    pool = AsyncConnectionPool(
+    pool: AsyncConnectionPool[AsyncConnection[DictRow]] = AsyncConnectionPool(
         db_url,
         name="Pool-connection",
+        kwargs={"row_factory": dict_row},
         min_size=1,
         max_size=10,
         max_waiting=5,
@@ -51,6 +56,7 @@ async def lifespan(app: FastAPI):
     try:
         await pool.open()
         log.info("connection pool status: open")
+        
         checkpointer = AsyncPostgresSaver(pool)
         await checkpointer.setup()
         log.info("checkpointer connection successful")
@@ -60,11 +66,14 @@ async def lifespan(app: FastAPI):
 
         sys_prompt = ReadOnly()
         agent_lookup = {}
+        
         for tier in MODEL_MAP:
             endpoint = model_endpoint(tier)
             if endpoint is None:
                 raise RuntimeError(f"No model endpoint configured for tier {tier.value}.")
+            
             log.info("creating agent..")
+            
             agent = create_agent(
                 endpoint,
                 tools,
@@ -74,9 +83,11 @@ async def lifespan(app: FastAPI):
             agent_lookup[tier] = agent
 
         log.info("loading language model..")
+        
         lang_model_path = os.getenv("LANG_MODEL")
         if not lang_model_path:
             raise RuntimeError("LANG_MODEL must be configured before starting the application.")
+        
         lang_model = load_model(lang_model_path)
 
         state_container = AppStateContext(
@@ -86,9 +97,12 @@ async def lifespan(app: FastAPI):
             pool=pool,
             checkpointer=checkpointer,
         )
+        
         yield {"context": state_container}
+        
     finally:
         log.info("checkpointer connection shutting down..")
+        
         if not pool.closed:
             await pool.close()
             log.info("connection pool status: closed")
