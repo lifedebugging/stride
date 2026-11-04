@@ -2,7 +2,7 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any
 from fastapi import FastAPI, Request
-from fasttext import load_model
+from fasttext import load_model   
 from pydantic import BaseModel, ConfigDict
 from psycopg import AsyncConnection
 from psycopg.rows import DictRow, dict_row
@@ -45,8 +45,8 @@ async def lifespan(app: FastAPI):
         db_url,
         name="Pool-connection",
         kwargs={"row_factory": dict_row},
-        min_size=1,
-        max_size=10,
+        min_size=1,  #keep 1 connection warm
+        max_size=10, #never more than 10
         max_waiting=5,
         max_lifetime=3600.0,
         reconnect_timeout=2.0,
@@ -57,6 +57,7 @@ async def lifespan(app: FastAPI):
         await pool.open()
         log.info("connection pool status: open")
         
+        # Create checkpointer with pool (connection stays alive via pool)
         checkpointer = AsyncPostgresSaver(pool)
         await checkpointer.setup()
         log.info("checkpointer connection successful")
