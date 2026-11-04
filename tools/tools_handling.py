@@ -1,5 +1,4 @@
-import asyncio
-import os
+import sys
 from pathlib import Path
 from typing import Any
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -15,28 +14,26 @@ async def tool_call():
     connections: dict[str, Any] = {
         "get_time": {
             "transport": "stdio",
-            "command": "python",
-        "args": [str(Path(__file__).resolve().parent / "time_tool.py")],
+            "command": sys.executable,
+            "args": ["-u",
+                    str(Path(__file__).resolve().parent / "time_mcp.py")],
             },
         
         "rag_subagent": {
-            "transport": "http",
-            "url": os.environ["RAG_SUBAGENT_MCP_URL"],
+            "transport": "stdio",
+            "command": sys.executable,
+            "args": ["-u",
+                    str(Path(__file__).resolve().parent / "rag_mcp.py")],
         }
     }
     try:
         client = MultiServerMCPClient(connections)
-        
-    except Exception as e:
-        log.exception(f"Tool Connection failed : {e}")
-        raise RuntimeError("Tool connection failed. Please try again later.")
-    
-    if client:
         tools = await client.get_tools()
-        print(tools)
-        return tools
-    else:
-        log.warning("server is running but couldn't fetch the tools, check your server file.")
+    except Exception as e:
+        log.exception(f"Tool discovery failed: {e}")
+        raise RuntimeError("Tool discovery failed. Please check the MCP server logs.") from e
 
+    if not tools:
+        raise RuntimeError("MCP servers returned no tools.")
 
-print(asyncio.run(tool_call()))
+    return tools
