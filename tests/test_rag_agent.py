@@ -2,7 +2,7 @@ import asyncio
 
 from langchain_core.messages import AIMessage
 
-import tools.rag_mcp as rag_agent_module
+import tools.rag_agent_tool as rag_agent_module
 
 
 def test_create_rag_tool_reuses_agent(monkeypatch):

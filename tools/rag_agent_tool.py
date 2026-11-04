@@ -102,13 +102,12 @@ async def search_docs(query: str) -> str:
         # for doc in result:
         #     chunks.append(doc.page_content)
 
-        # Modern clean list comprehension combined with XML tagging
+        # comprehension combined with XML tagging
         formatted_chunks = [
             f"<document index='{index}'>\n{document.page_content}\n</document>"
             for index, document in enumerate(result)
         ]
         return "\n".join(formatted_chunks)
-        # return "\n\n".join(chunks)
     except Exception as e:
         log.exception("search_docs retriever failed: %s", str(e))
         raise
@@ -155,7 +154,7 @@ def create_rag_tool():
             )
         return content
 
-    # MAIN RESPONSE HANDLER
+    # Response handler
     @tool
     async def rag(query: str) -> str:
         """
