@@ -23,6 +23,11 @@
     
     "python-envs.defaultEnvManager": "ms-python.python:venv",
     "python.analysis.languageServerMode": "light",
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
     
     
     
