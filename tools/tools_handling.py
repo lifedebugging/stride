@@ -19,19 +19,12 @@ async def tool_call():
             "args": ["-u", "-m", "tools.time_mcp"],
             "cwd": str(project_root),
             },
-        
-        "rag_subagent": {
-            "transport": "stdio",
-            "command": sys.executable,
-            "args": ["-u", "-m", "tools.rag_mcp"],
-            "cwd": str(project_root),
-        }
     }
     try:
         client = MultiServerMCPClient(connections)
         tools = await client.get_tools()
     except Exception as e:
-        log.error(f"Tool discovery failed ({type(e).__name__}): {ascii(e)}")
+        log.exception(f"Tool discovery failed ({e}")
         raise
 
     if not tools:
