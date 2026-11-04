@@ -50,6 +50,7 @@ async def safe_llm_classifier(query : str,
         
         if endpoint is None:
             log.error("Classifier endpoint is not configured")
+            raise
             
 
         llm_classifier = endpoint.with_structured_output(StrictOutput)
@@ -57,6 +58,7 @@ async def safe_llm_classifier(query : str,
         return await asyncio.wait_for(
             llm_classifier.ainvoke(query),
             timeout = timeout)
+        
         
     except asyncio.TimeoutError:
         log.info(f"LLM classification timed out after {timeout}s for query: '{query}'")
