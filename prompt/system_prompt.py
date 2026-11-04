@@ -34,8 +34,8 @@ class ReadOnly:
                             </security_policy>
                             
                             <tools>
-                            - get_time: For dates and times.
-                            - rag_subagent: For context-specific verification and reasoning. Do not use for casual chat.
+                            - get_datetime: For dates and times.
+                            - rag: For context-specific verification and reasoning. Do not use for casual chat.
                             </tools>
                             """, 
                             init=False
@@ -46,4 +46,3 @@ class ReadOnly:
         
         
         
-
