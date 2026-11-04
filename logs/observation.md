@@ -947,3 +947,16 @@ or IF NOT pgvector since i m already using postgres SQL `pgvector` can be unifie
 ~ marked for after deployment
 #######################################################################################
 
+# 4/11 RAG tool: MCP to local tool
+
+I moved the RAG agent from an MCP stdio server to a local LangChain tool inside the FastAPI app.
+
+The RAG agent was only used by this app. With stdio MCP, the main agent had to cross a process boundary to call it, and the adapter starts a server process for tool calls. That made it harder to keep and reuse the RAG agent between requests.
+
+Now FastAPI creates the RAG tool during lifespan startup and gives it to the main agents. So the RAG agent stays in the app process and can be reused. The document retriever still loads only when a document search actually happens.
+
+This doesn't mean MCP is bad. MCP would make more sense if I wanted the RAG service to run separately, let other apps use it, or build it in another language. For now it is an internal tool for one app, so the local tool is a simpler fit.
+
+Don't claim I measured a latency improvement because I haven't benchmarked it. The actual reasons are less process-boundary complexity and reusing the agent in the same process.
+
+#######################################################################################
