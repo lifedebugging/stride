@@ -20,7 +20,7 @@ class StrictOutput(BaseModel):
     category: str = Field(default="uncategorized-classifier", description="Intent category like GREETINGS, CODING, etc.")
     confidence: float = Field(default=0.0, description="Confidence score between 0 and 1")
     model: Literal["Fast", "Smart"] = Field(default="Fast", description="Model tier: Fast for simple queries, Smart for complex")
-    tool: str = Field(default="None", description="Invoke 'get_time' for time queries, 'rag_subagent' for external documents related to 'How Organizations Use AI: Evidence from ChatGPT', or return 'none' if no tool is needed.")
+    tool: str = Field(default="tools", description="Invoke 'get_time' for time queries, 'rag_subagent' for external documents related to 'How Organizations Use AI: Evidence from ChatGPT', or return 'none' if no tool is needed.")
     
     
 @dataclass
