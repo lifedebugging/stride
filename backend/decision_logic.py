@@ -62,11 +62,12 @@ async def safe_llm_classifier(query : str,
         
     except asyncio.TimeoutError:
         log.info(f"LLM classification timed out after {timeout}s for query: '{query}'")
-        return StrictOutput(model="Fast", tool="None")
-    
+        return StrictOutput()
+          
     except Exception as e:
         log.exception(f"Classifier failed: {e}")
-        return StrictOutput(model="Fast", tool="None")
+        return StrictOutput()
+
         
         
 async def resolve_intent(
@@ -115,8 +116,6 @@ async def resolve_intent(
         except Exception as e:
             log.exception(f"classifier failed to fetch intent: {e}")
         
-        
-    
     
 def _pack(raw: Dict[str, Any],
           source: str
