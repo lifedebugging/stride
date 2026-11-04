@@ -41,10 +41,10 @@ async def lifespan(app: FastAPI):
     if not db_url:
         raise RuntimeError("DB_URL must be configured before starting the application.")
 
-    pool: AsyncConnectionPool[AsyncConnection[DictRow]] = AsyncConnectionPool(      # just the typehint to satisfy typechecker
+    pool = AsyncConnectionPool(     
         db_url,
         name="Pool-connection",
-        kwargs={"row_factory": dict_row}, 
+        kwargs={"row_factory": dict_row},    #improves how i can access database row[id] instead row[0]
         min_size=1,  #keep 1 connection warm
         max_size=10, #never more than 10
         max_waiting=5,
@@ -58,8 +58,7 @@ async def lifespan(app: FastAPI):
         log.info("connection pool status: open")
         
         # Create checkpointer with pool (connection stays alive via pool)
-        checkpointer = AsyncPostgresSaver(pool)
-        await checkpointer.setup()
+        checkpointer = AsyncPostgresSaver(conn=pool)  # type: ignore
         log.info("checkpointer connection successful")
 
         tools = await tool_call()
@@ -113,5 +112,4 @@ def get_ctx(request: Request) -> AppStateContext:
     return request.state.context
 
 
-    
-   
+
