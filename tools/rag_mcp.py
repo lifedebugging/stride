@@ -29,6 +29,10 @@ from mcp.server.fastmcp import FastMCP
 from config.model_config import model_endpoint, ModelTier
 from config.logging_handler import get_logger
 
+for handler in logging.getLogger().handlers:
+    if isinstance(handler, logging.StreamHandler) and handler.stream is sys.stdout:
+        handler.setStream(sys.stderr)
+
 # CONFIGURATION & INITIALIZATION
 logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 load_dotenv(override=True)
