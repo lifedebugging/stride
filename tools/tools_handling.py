@@ -1,16 +1,16 @@
-from langchain_mcp_adapters.client import MultiServerMCPClient
+import asyncio
 from pathlib import Path
+from typing import Any
+from langchain_mcp_adapters.client import MultiServerMCPClient
 from config.error_handler import retry_with_backoff
 from config.logging_handler import get_logger
-import asyncio
-import sys
-from typing import Any
 
 
 log = get_logger("tool_handler")
+
+
 @retry_with_backoff()
 async def tool_call():
-    tools = []
     connections: dict[str, Any] = {
         "get_time": {
             "transport": "stdio",
@@ -32,10 +32,10 @@ async def tool_call():
     
     if client:
         tools = await client.get_tools()
+        print(tools)
         return tools
     else:
         log.warning("server is running but couldn't fetch the tools, check your server file.")
 
 
 print(asyncio.run(tool_call()))
-
