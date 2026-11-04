@@ -1,4 +1,5 @@
 import asyncio
+import os
 from pathlib import Path
 from typing import Any
 from langchain_mcp_adapters.client import MultiServerMCPClient
@@ -15,14 +16,14 @@ async def tool_call():
         "get_time": {
             "transport": "stdio",
             "command": "python",
-        "args": [str(Path("gettime_tool.py"))],
+        "args": [str(Path(__file__).resolve().parent / "time_tool.py")],
             },
         
-        "rag_subagent":{
+        "rag_subagent": {
             "transport": "http",
-            "url": "http://localhost:8000/mcp"
-            }
+            "url": os.environ["RAG_SUBAGENT_MCP_URL"],
         }
+    }
     try:
         client = MultiServerMCPClient(connections)
         
