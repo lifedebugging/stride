@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from typing import Any
 from fastapi import FastAPI, Request
@@ -12,7 +13,7 @@ from tools.tools_handling import tool_call
 from pathlib import Path
 from dotenv import load_dotenv
 from config.logging_handler import get_logger
-import os
+
 
 #override=True gives the os set variable absolute priority
 load_dotenv(override=True)
