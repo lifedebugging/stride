@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI):
     if not db_url:
         raise RuntimeError("DB_URL must be configured before starting the application.")
 
-    pool: AsyncConnectionPool[AsyncConnection[DictRow]] = AsyncConnectionPool(      # just the typehint
+    pool: AsyncConnectionPool[AsyncConnection[DictRow]] = AsyncConnectionPool(      # just the typehint to satisfy typechecker
         db_url,
         name="Pool-connection",
         kwargs={"row_factory": dict_row}, 
