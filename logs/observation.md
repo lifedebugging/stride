@@ -962,3 +962,15 @@ Don't claim I measured a latency improvement because I haven't benchmarked it. T
 Also lot's of subtle changes I made lot's of correction made in `lifepspan`
 and error handling.
 #######################################################################################
+
+
+## observation
+
+facing issue with fasttext.
+
+Wanted to refract to fastlangid, however it depends on fasttext which is a legacy
+
+Tried to use `fastext-wheel` community maintained but not working
+
+~ marked to check later
+
