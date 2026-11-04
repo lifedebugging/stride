@@ -959,4 +959,6 @@ This doesn't mean MCP is bad. MCP would make more sense if I wanted the RAG serv
 
 Don't claim I measured a latency improvement because I haven't benchmarked it. The actual reasons are less process-boundary complexity and reusing the agent in the same process.
 
+Also lot's of subtle changes I made lot's of correction made in `lifepspan`
+and error handling.
 #######################################################################################
