@@ -27,7 +27,7 @@ def retry_with_backoff(exception = Exception, max_attempts: int =3,):
 
                     
                 if (i==max_attempts-1):
-                    raise Exception(f"\nAll retry attempts failed")  #exhaused all delays
+                    logger.error("All retry attempts failed. Please try again later")  #exhaused all delays
                         
         return wrapper
     return decorator
