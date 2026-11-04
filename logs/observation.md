@@ -974,3 +974,8 @@ Tried to use `fastext-wheel` community maintained but not working
 
 ~ marked to check later
 
+# Postgres pool type annotation
+
+`AsyncConnectionPool[AsyncConnection[DictRow]]` is just the type hint. It tells me and Pylance that this pool gives async Postgres connections and the rows from queries are dict-like.
+
+The type hint by itself doesn't change how the database works. `kwargs={"row_factory": dict_row}` is the actual setting that makes query results dict-like, so I can use `row["id"]` instead of `row[0]`.
