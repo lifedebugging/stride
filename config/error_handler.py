@@ -4,7 +4,7 @@ import asyncio
 
 
 logger = logging.getLogger(__name__)
-def retry_with_backoff(exception = Exception, max_attempts: int =3,):
+def retry_with_backoff(exception = Exception, max_attempts: int =5,):
 
     def decorator(func):
         
