@@ -13,7 +13,10 @@ def retry_with_backoff(exception = Exception, max_attempts: int =3,):
                 try:
                     return await func(*args, **kwargs)
                 
-                except exception as e:
+                except exception:
+                    if i == max_attempts - 1:
+                        logger.exception("All retry attempts failed")
+                        raise
         
                     base_delay = 2
                     multiplier = 3.0
@@ -24,10 +27,6 @@ def retry_with_backoff(exception = Exception, max_attempts: int =3,):
                     jitter = (random.uniform(0.5, 3.0)  * intial_delay)
                     cap = min(jitter, max_delay)
                     await asyncio.sleep(cap)
-
-                    
-                if (i==max_attempts-1):
-                    logger.error("All retry attempts failed. Please try again later")  #exhaused all delays
                         
         return wrapper
     return decorator
