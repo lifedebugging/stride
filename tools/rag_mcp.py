@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 import asyncio
+from functools import lru_cache
 from pathlib import Path
 from typing import cast
 
@@ -33,13 +34,10 @@ logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 load_dotenv(override=True)
 
 # TOOL NAME
-mcp = FastMCP("rag_subagent", host="127.0.0.1", port=6600)
+mcp = FastMCP("rag_subagent") # host="127.0.0.1", port=6600)
 
 # LOG INSTANTIATION
 log = get_logger("mcp/rag")
-
-# LLM CONFIGURATION
-model_id = cast(BaseChatModel, model_endpoint(ModelTier.fast))
 
 # VECTOR STORE FILE ABSOLUTE PATH
 CURRENT_DIR = Path(__file__).resolve().parent.parent
@@ -111,7 +109,16 @@ def build_retrievers(vector_store, splitted_documents):
 
     return ensemble_retriever
 
-final_retriever = Indexing()
+class retriever_manager:
+    def __init__(self):
+        self._retriever = None
+        
+    def __call__(self):
+        if self._retriever is None:
+            self._retriever = Indexing()
+        return self._retriever
+
+get_retriever = retriever_manager()
 
 # TOOLS DECORATOR
 @tool
@@ -122,7 +129,7 @@ async def search_docs(query: str)-> str:
     Use this when you need factual information from the material you've been provided.
     """
     try:
-        result = await final_retriever.ainvoke(query)
+        result = await get_retriever().ainvoke(query)
 
         # chunks = []
         # for doc in result:
@@ -136,27 +143,29 @@ async def search_docs(query: str)-> str:
         return "\n".join(formatted_chunks)
         # return "\n\n".join(chunks)
     except Exception as e:
-        log.exception("search_docs retriever failed", error=str(e))
+        log.exception("search_docs retriever failed: %s", str(e))
         raise
 
-# AGENT CONFIGURATION
-agent = create_agent(
-    model=model_id,
-    tools=[search_docs],
-    system_prompt= 
-    """
-    Role:You're an agent with external knowledge base with context.
-         You always use your tool to retrieve data from external database when user ask context speciic question
+@lru_cache(maxsize=1)
+def get_agent():
+    model_id = cast(BaseChatModel, model_endpoint(ModelTier.fast))
+    return create_agent(
+        model=model_id,
+        tools=[search_docs],
+        system_prompt=
+        """
+        Role:You're an agent with external knowledge base with context.
+             You always use your tool to retrieve data from external database when user ask context speciic question
 
 
-    Constraints: Use the following pieces of retrieved context to answer the question. 
-                 If you don't know the answer, just say that you don't know.
-                 Do not produce wrong answer with confidence.
+        Constraints: Use the following pieces of retrieved context to answer the question.
+                     If you don't know the answer, just say that you don't know.
+                     Do not produce wrong answer with confidence.
 
-    Output_format: Accurate, Precise and Meaningful.
-                   'strictly' Paraphrase, never quote directly
-                   """
-)
+        Output_format: Accurate, Precise and Meaningful.
+                       'strictly' Paraphrase, never quote directly
+                       """
+    )
 
 # MAIN RESPONSE HANDLER
 @mcp.tool()
@@ -176,7 +185,7 @@ async def rag(query) -> str:
     @retry_with_backoff()
     async def response_func():
         try:
-            result = await agent.ainvoke(
+            result = await get_agent().ainvoke(
                 {"messages": [HumanMessage(content=query)]}
             )
         except ValueError as e:
@@ -192,4 +201,4 @@ async def rag(query) -> str:
     return await response_func()
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http")
+    mcp.run(transport="stdio")

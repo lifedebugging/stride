@@ -16,14 +16,16 @@ async def list_my_tools():
         Tool(
             name = "get_datetime",
             description="Returns current date and time with accuracy",
-            inputSchema={"types" : "object", "properties": {}},
+            inputSchema={"type": "object", "properties": {}},
             )
         ]
 
 # the Logic (The Switchboard)
 @app.call_tool()
-async def execute_tool(name):
+async def execute_tool(name: str, arguments: dict):
     if name == "get_datetime":
+        if arguments:
+            raise ValueError("get_datetime does not accept arguments")
         try:
             current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             return CallToolResult(content=[TextContent(type="text", 
@@ -32,10 +34,8 @@ async def execute_tool(name):
         except Exception as e:
             log.exception("datetime tool not working", error=str(e))
             raise       
-    else:
-    # Always handle the "unknown tool" case
-        log.error(ValueError(f"Tool not found : {name}"))
-        raise
+
+    raise ValueError(f"Tool not found: {name}")
 
 #the Transport (The Pipes)
 async def main():
@@ -53,4 +53,3 @@ async def main():
         
 if __name__ == "__main__":
     asyncio.run(main())
-
