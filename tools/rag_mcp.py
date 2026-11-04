@@ -33,7 +33,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 load_dotenv(override=True)
 
 # TOOL NAME
-mcp = FastMCP("rag_subagent")
+mcp = FastMCP("rag_subagent", host="127.0.0.1", port=6600)
 
 # LOG INSTANTIATION
 log = get_logger("mcp/rag")
