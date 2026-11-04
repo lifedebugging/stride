@@ -11,27 +11,28 @@ log = get_logger("tool_handler")
 
 @retry_with_backoff()
 async def tool_call():
+    project_root = Path(__file__).resolve().parent.parent
     connections: dict[str, Any] = {
         "get_time": {
             "transport": "stdio",
             "command": sys.executable,
-            "args": ["-u",
-                    str(Path(__file__).resolve().parent / "time_mcp.py")],
+            "args": ["-u", "-m", "tools.time_mcp"],
+            "cwd": str(project_root),
             },
         
         "rag_subagent": {
             "transport": "stdio",
             "command": sys.executable,
-            "args": ["-u",
-                    str(Path(__file__).resolve().parent / "rag_mcp.py")],
+            "args": ["-u", "-m", "tools.rag_mcp"],
+            "cwd": str(project_root),
         }
     }
     try:
         client = MultiServerMCPClient(connections)
         tools = await client.get_tools()
     except Exception as e:
-        log.exception(f"Tool discovery failed: {e}")
-        raise RuntimeError("Tool discovery failed. Please check the MCP server logs.") from e
+        log.error(f"Tool discovery failed ({type(e).__name__}): {ascii(e)}")
+        raise
 
     if not tools:
         raise RuntimeError("MCP servers returned no tools.")
