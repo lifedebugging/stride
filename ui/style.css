@@ -44,7 +44,7 @@ body {
 }
 
 .mascot-toggle.open {
-    transform: translateX(214px);
+    transform: translateX(188px);
 }
 
 @keyframes stride-walk {
@@ -64,9 +64,9 @@ body {
 .sidebar-drawer {
     position: fixed;
     top: 0;
-    left: -280px;
+    left: -260px;
     /* Hidden off-screen by default */
-    width: 260px;
+    width: 250px;
     height: 100vh;
     background-color: #1F3323;
     /* Carved-out retro dark green */
@@ -219,7 +219,7 @@ body {
 }
 
 .mascot-toggle.open ~ .main-workspace .chat-input-area {
-    transform: scale(0.87);
+    transform: scale(0.85);
 }
 
 .chat-input {
