@@ -1,28 +1,25 @@
-const toggleBtn = document.getElementById('sidebar-toggle');
+const toggleBtn = document.getElementById('mascot');
 const drawer = document.getElementById('sidebar-drawer');
 const historyItems = document.querySelectorAll('.history-item');
 
-// Toggle sidebar drawer and trigger logo rotation
 toggleBtn.addEventListener('click', () => {
     const isOpen = drawer.classList.contains('open');
 
-    if (isOpen) {
-        closeSidebar();
-    } else {
-        openSidebar();
-    }
+    setSidebarOpen(!isOpen);
 });
 
-function openSidebar() {
-    drawer.classList.add('open');
-    toggleBtn.classList.add('open');
-    toggleBtn.classList.remove('close-anim');
+function closeSidebar() {
+    setSidebarOpen(false);
 }
 
-function closeSidebar() {
-    drawer.classList.remove('open');
-    toggleBtn.classList.remove('open');
-    toggleBtn.classList.add('close-anim');
+function setSidebarOpen(isOpen) {
+    drawer.classList.toggle('open', isOpen);
+    drawer.setAttribute('aria-hidden', String(!isOpen));
+    toggleBtn.setAttribute('aria-expanded', String(isOpen));
+    toggleBtn.setAttribute('aria-label', isOpen ? 'Close sidebar' : 'Open sidebar');
+    toggleBtn.classList.toggle('open', isOpen);
+    toggleBtn.classList.toggle('facing-left', !isOpen);
+    toggleBtn.classList.add('running');
 }
 
 // Automatically close the sidebar when selecting any chat history item
@@ -31,4 +28,13 @@ historyItems.forEach(item => {
         // ...logic to load selected chat...
         closeSidebar();
     });
+});
+
+toggleBtn.addEventListener('transitionend', event => {
+    if (event.target === toggleBtn && event.propertyName === 'transform') {
+        toggleBtn.classList.remove('running');
+        if (!drawer.classList.contains('open')) {
+            toggleBtn.classList.remove('facing-left');
+        }
+    }
 });
