@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Stride</title>
         <link rel="stylesheet" href="style.css" />
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
     </head>
 
     <body>
@@ -87,6 +88,25 @@
                     <input type="text" placeholder="Type a message..." class="chat-input" />
                     <button type="submit" class="send-btn">Send</button>
                 </div>
+
+
+            <!-- Google Sign-In Button Container -->
+            <div id="g_id_onload" data-client_id="946934091029-n1scrsb53sps38n8vqi2uinh97orf7f0.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard"></div>
+
+            <script>
+                function handleCredentialResponse(response) {
+                    // The response.credential is a JWT containing user info
+                    console.log("Encoded JWT ID token: " + response.credential);
+
+                    // Decode JWT payload (simple base64 decode for testing)
+                    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                    console.log("User Email: " + payload.email);
+                    console.log("User Name: " + payload.name);
+                }
+            </script>
 
 
             </main>
