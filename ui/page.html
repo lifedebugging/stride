@@ -11,24 +11,6 @@
         <div class="app-layout">
             <!-- Chat elements go here -->
             <aside class="sidebar">
-                <!-- Spinning logo button that toggles the sidebar drawer -->
-                <button id="sidebar-toggle" class="sidebar-logo-btn" aria-label="Toggle Sidebar">
-                    <img src="path/to/your/sidebar-logo.png" alt="Menu" class="sidebar-logo-img" />
-                </button>
-                <div class="sidebar-icon">+</div>
-
-                <!-- Sliding drawer (hidden off-screen until opened) -->
-                <nav id="sidebar-drawer" class="sidebar-drawer">
-                    <div class="drawer-header">
-                        <button class="new-chat-btn">+ New Chat</button>
-                    </div>
-                    <ul class="chat-history-list">
-                        <!-- Sample chat history item -->
-                        <li class="history-item">Pixel Art Shader Discussion</li>
-                        <li class="history-item">Janus Engine v4 Setup</li>
-                    </ul>
-                </nav>
-
                 <div class="sidebar-footer">
                     <!-- GitHub -->
                     <a href="https://github.com/your-username" target="_blank" class="social-link" title="GitHub">
@@ -54,6 +36,23 @@
                         </svg>
                     </a>
             </aside>
+
+            <button id="mascot" class="mascot-toggle" type="button" aria-controls="sidebar-drawer"
+                aria-expanded="false" aria-label="Open sidebar">
+                <span class="pixel-mascot" aria-hidden="true"></span>
+            </button>
+
+            <!-- Sliding drawer (hidden off-screen until opened) -->
+            <nav id="sidebar-drawer" class="sidebar-drawer" aria-hidden="true">
+                <div class="drawer-header">
+                    <button class="new-chat-btn">+ New Chat</button>
+                </div>
+                <ul class="chat-history-list">
+                    <!-- Sample chat history item -->
+                    <li class="history-item">Pixel Art Shader Discussion</li>
+                    <li class="history-item">Janus Engine v4 Setup</li>
+                </ul>
+            </nav>
 
             <main class="main-workspace">
                 <div class="top-nav">
@@ -93,5 +92,6 @@
             </main>
         
 
+        <script src="script.js" defer></script>
     </body>
 </html>
