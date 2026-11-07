@@ -32,7 +32,8 @@ async def execute_tool(name: str, arguments: dict):
                                 text = f"The time is {current_datetime}"
                             )])
         except Exception as e:
-            log.exception("datetime tool not working", error=str(e))
+            log.exception(f"datetime tool not working: {e}")
+            # Re-raise the caught exception for upstream handling
             raise       
 
     raise ValueError(f"Tool not found: {name}")
