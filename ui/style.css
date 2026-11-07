@@ -20,6 +20,11 @@ body {
     border-right: 2px solid #364f3a;
     padding: 1rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Pushes top to top, footer to bottom */
+    align-items: center;
 }
 
 .sidebar-icon {
@@ -27,6 +32,15 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
+    text-align: center;
+}
+
+/* Social links container at sidebar bottom */
+.sidebar-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
 }
 
 /* Main screen workspace */
@@ -39,14 +53,63 @@ body {
     align-items: center;
     /* Centers everything horizontally */
     padding: 2rem;
+    position: relative;
+
+    /* Create grid lines spaced 24px apart using low-opacity green */
+    background-image:
+        linear-gradient(to right, rgba(54, 79, 58, 0.35) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(54, 79, 58, 0.35) 1px, transparent 1px);
+    background-size: 24px 24px;
+
+    /* Smooth 0.5s transition when switching grid opacity */
+    transition: background-image 0.5s ease, opacity 0.5s ease;
+
+    .top-nav {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            flex-direction: row;
+            /* Arranges icons horizontally */
+            gap: 1.25rem;
+            z-index: 10;
+        }
+    .social-link {
+        color: #1F3323;
+        /* Icon color in background space */
+        transition: color 0.2s ease;
+    }
+
+    .social-link:hover {
+        color: #364f3a;
+    }
+
+    .social-icon {
+        width: 22px;
+        height: 22px;
+    }
+}
+    
+/* State when the user is actively chatting: hides/fades the grid */
+.main-workspace.active-chat {
+    background-image: none;
 }
 
+
 /* Center Stride Pixel Logo placeholder */
-.center-stride-logo h1 {
-    font-size: 3rem;
-    color: #1F3323;
+.center-stride-logo {
     margin-bottom: 2rem;
-    letter-spacing: 2px;
+}
+
+.logo-img {
+    width: 450px;
+    /* Scaled up for screen presence */
+    max-width: 90vw;
+    /* Keeps it responsive on smaller screens */
+    height: auto;
+    /* Preserves aspect ratio */
+    image-rendering: pixelated;
+    /* Keeps retro pixels crisp */
 }
 
 /* Response text area */
