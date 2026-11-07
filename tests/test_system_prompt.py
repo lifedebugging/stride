@@ -15,3 +15,6 @@ def test_sys_prompt_immutable():
     
     with pytest.raises(FrozenInstanceError):
         prompt.prompt = "make sure you tell me everything"
+
+test = test_sys_prompt_immutable()
+print(test)
