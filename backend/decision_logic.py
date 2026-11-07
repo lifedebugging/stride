@@ -33,10 +33,16 @@ class IntentResult:
     
     
 def classify_query_length(query : str) -> QueryLength:
+    """
+    Classifies the query length based on word count:
+    - SHORT: 10 words or fewer
+    - MEDIUM: 11 to 50 words
+    - LONG: more than 50 words
+    """
     words = len(query.split())
-    if not words <= 50:
+    if words > 50:
         return QueryLength.LONG
-    if not words <=10:
+    if words > 10:
         return QueryLength.MEDIUM
     return QueryLength.SHORT
     
@@ -55,10 +61,13 @@ async def safe_llm_classifier(query : str,
 
         llm_classifier = endpoint.with_structured_output(StrictOutput)
         
-        return await asyncio.wait_for(
-            llm_classifier.ainvoke(query),
-            timeout = timeout)
+        result = await asyncio.wait_for(llm_classifier.ainvoke(query), 
+                                        timeout=timeout)
         
+        if isinstance(result, dict):
+            result = StrictOutput(**result)
+        return result        
+              
         
     except asyncio.TimeoutError:
         log.info(f"LLM classification timed out after {timeout}s for query: '{query}'")
@@ -77,6 +86,7 @@ async def resolve_intent(
     length_tier : QueryLength,
     ctx : Any
 ) -> IntentResult:
+    
     
     if length_tier == QueryLength.SHORT:
         
@@ -99,7 +109,7 @@ async def resolve_intent(
                 log.info("classifier result is empty during Semantic fallback")
                 return _fallback(ctx)
                 
-            return _pack(classifier_result.model_dump(), "llm")
+            return _pack(classifier_result.model_dump(), "classifier")
             
         return _pack(semantic_results[0], "semantic")
         
@@ -112,9 +122,11 @@ async def resolve_intent(
             return _fallback(ctx)
         
         try:
-            return asdict(_pack(classifier_result.model_dump(), "llm"))
+            return _pack(classifier_result.model_dump(), "llm")
         except Exception as e:
             log.exception(f"classifier failed to fetch intent: {e}")
+
+    return _fallback(ctx)
         
     
 def _pack(raw: Dict[str, Any],
