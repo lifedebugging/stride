@@ -10,7 +10,7 @@ from fastapi import FastAPI, Depends
 from fastapi.responses import StreamingResponse
 from collections.abc import AsyncIterator
 
-from  backend.lifespan import get_ctx, lifespan, AppStateContext
+from  backend.lifespan import get_appctx, lifespan, AppStateContext
 from decision_logic import Decision_logic
 # from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 # from logging_handler import setup_logging, get_logger
@@ -31,7 +31,7 @@ app = FastAPI(lifespan=lifespan)
 #handler
 @app.post("/route")
 async def handler(query: Query, 
-                  ctx: AppStateContext = Depends(get_ctx),   #telling the router it's dependency
+                  ctx: AppStateContext = Depends(get_appctx),   #telling the router it's dependency
                   ):
     
     # StreamingResponse for streaming output
@@ -59,8 +59,10 @@ async def main(query : Query,  ctx: AppStateContext) -> AsyncIterator[str]:
     
              
 if __name__ == "__main__":
+    host = os.getenv("HOST", "127.0.0.1")
+    port = int(os.getenv("PORT", "8001"))
     try:
-        uvicorn.run("x_v5:app", host = "127.0.0.1", port = 8001, reload= True)
+        uvicorn.run("x_v5:app", host=host, port=port, reload=True)
     except Exception as e:
-        log.exception(f"an error occured: {e}") 
+        log.exception(f"an error occurred: {e}") 
 
