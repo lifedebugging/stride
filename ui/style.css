@@ -15,6 +15,10 @@ body {
 
 /* Left sidebar slot */
 .sidebar {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 100;
     width: 60px;
     background-color: #1F3323;
     border-right: 2px solid #364f3a;
@@ -28,13 +32,54 @@ body {
 }
 
 .sidebar-icon {
-    color: #808836;
-    font-size: 1.5rem;
-    font-weight: bold;
+    background: transparent;
+    border: none;
     cursor: pointer;
-    text-align: center;
+    padding: 0;
+    outline: none;
+    z-index: 110;
+    position: relative;
 }
 
+.sidebar-logo-img {
+    width: 36px;
+    height: 36px;
+    image-rendering: pixelated;
+    transition: transform 0.4s ease-in-out;
+}
+
+/* Clockwise spin when opening drawer */
+.sidebar-logo-btn.open .sidebar-logo-img {
+    transform: rotate(180deg);
+}
+
+/* Counter-clockwise spin when closing drawer */
+.sidebar-logo-btn.close-anim .sidebar-logo-img {
+    transform: rotate(0deg);
+}
+
+/* Sliding dark green sidebar drawer */
+.sidebar-drawer {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    /* Hidden off-screen by default */
+    width: 260px;
+    height: 100vh;
+    background-color: #1F3323;
+    /* Carved-out retro dark green */
+    border-right: 2px solid #364f3a;
+    padding: 5rem 1.5rem 2rem 1.5rem;
+    box-sizing: border-box;
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+    z-index: 105;
+}
+
+/* Active drawer state: slides into view */
+.sidebar-drawer.open {
+    left: 0;
+}
 /* Social links container at sidebar bottom */
 .sidebar-footer {
     display: flex;
