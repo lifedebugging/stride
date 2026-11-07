@@ -1,6 +1,7 @@
 const toggleBtn = document.getElementById('mascot');
 const drawer = document.getElementById('sidebar-drawer');
 const historyItems = document.querySelectorAll('.history-item');
+let mascotTurnTimer;
 
 toggleBtn.addEventListener('click', () => {
     const isOpen = drawer.classList.contains('open');
@@ -13,6 +14,7 @@ function closeSidebar() {
 }
 
 function setSidebarOpen(isOpen) {
+    clearTimeout(mascotTurnTimer);
     drawer.classList.toggle('open', isOpen);
     drawer.setAttribute('aria-hidden', String(!isOpen));
     toggleBtn.setAttribute('aria-expanded', String(isOpen));
@@ -33,7 +35,13 @@ historyItems.forEach(item => {
 toggleBtn.addEventListener('transitionend', event => {
     if (event.target === toggleBtn && event.propertyName === 'transform') {
         toggleBtn.classList.remove('running');
-        if (!drawer.classList.contains('open')) {
+        if (drawer.classList.contains('open')) {
+            mascotTurnTimer = setTimeout(() => {
+                if (drawer.classList.contains('open')) {
+                    toggleBtn.classList.add('facing-left');
+                }
+            }, 500);
+        } else {
             toggleBtn.classList.remove('facing-left');
         }
     }
