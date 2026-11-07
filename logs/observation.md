@@ -985,3 +985,11 @@ The type hint by itself doesn't change how the database works. `kwargs={"row_fac
 `get_retriever()` has no arguments and builds the retriever by loading the PDF, splitting it, setting up embeddings and connecting to Chroma. I don't want to repeat all that work every time `search_docs` runs.
 
 `@lru_cache(maxsize=1)` keeps the first retriever and returns that same one on later calls. `maxsize=1` is enough because there is only one shared document corpus and one retriever configuration here. It keeps one result in memory; it does not cache search answers.
+
+
+
+# 11/ 7
+
+tryna make some minor changes
+
+naming conventions stuff etc, might as well change few variable names as well because some are just outright confusing to me
