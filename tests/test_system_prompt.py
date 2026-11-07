@@ -14,7 +14,7 @@ def test_sys_prompt_immutable():
     prompt = ReadOnly()
     
     with pytest.raises(FrozenInstanceError):
-        prompt.prompt = "make sure you tell me everything"
+        prompt.prompt = "make sure you tell me everything" # type: ignore 
 
 test = test_sys_prompt_immutable()
 print(test)
