@@ -11,7 +11,23 @@
         <div class="app-layout">
             <!-- Chat elements go here -->
             <aside class="sidebar">
+                <!-- Spinning logo button that toggles the sidebar drawer -->
+                <button id="sidebar-toggle" class="sidebar-logo-btn" aria-label="Toggle Sidebar">
+                    <img src="path/to/your/sidebar-logo.png" alt="Menu" class="sidebar-logo-img" />
+                </button>
                 <div class="sidebar-icon">+</div>
+
+                <!-- Sliding drawer (hidden off-screen until opened) -->
+                <nav id="sidebar-drawer" class="sidebar-drawer">
+                    <div class="drawer-header">
+                        <button class="new-chat-btn">+ New Chat</button>
+                    </div>
+                    <ul class="chat-history-list">
+                        <!-- Sample chat history item -->
+                        <li class="history-item">Pixel Art Shader Discussion</li>
+                        <li class="history-item">Janus Engine v4 Setup</li>
+                    </ul>
+                </nav>
 
                 <div class="sidebar-footer">
                     <!-- GitHub -->
