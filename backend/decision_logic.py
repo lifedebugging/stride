@@ -1,13 +1,13 @@
 import asyncio
 from dataclasses import dataclass, asdict
 from routers.intent_router import normalization, keyword_intent, semantic_intent
-from backend.lifespan import get_ctx, AppStateContext
+from backend.lifespan import get_appctx, AppStateContext
 from typing import Optional, List, Dict, Any, Literal, Callable
 from enum import Enum
 from pydantic import BaseModel, Field, ValidationError
 from config.model_config import classifier_endpoint
 from config.logging_handler import get_logger
-
+from fastapi import Depends
 log = get_logger("decision_logic")
 
 class QueryLength(Enum):
@@ -84,7 +84,7 @@ async def resolve_intent(
     keyword_results : Optional[List[Dict[str, Any]]],
     semantic_results : Optional[List[Dict[str, Any]]],
     length_tier : QueryLength,
-    ctx : Any
+    ctx : AppStateContext = Depends(get_appctx)
 ) -> IntentResult:
     
     
@@ -153,7 +153,7 @@ def _fallback(ctx: Any) -> IntentResult:
     )
 
 def predict_language(text: str, 
-                     ctx: AppStateContext, 
+                     ctx: AppStateContext = Depends(get_appctx), 
                      k: int = 1
                      ):
     
@@ -189,7 +189,7 @@ async def IntentCall(func: Callable[..., Any],
                 return None
 
 async def Decision_logic(query: str,
-                         ctx: Any
+                         ctx: AppStateContext = Depends(get_appctx)
                         ) -> Dict[str, Any]:
     
     
