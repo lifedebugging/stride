@@ -1,6 +1,5 @@
 import requests
 from config.logging_handler import get_logger
-from datetime import datetime
 import time
 import uuid
 import json
@@ -10,7 +9,7 @@ thread_id_str = str(thread_id)
 
 log = get_logger("client.response")
 
-def ClientChunks():
+def client_chunks():
     while True:
         #input
         query = {
@@ -33,9 +32,9 @@ def ClientChunks():
         try:
             start = time.perf_counter()
             #iter_lines change iter_content
-            for chunk in response.iter_content(decode_unicode=True, chunk_size=None):
+            for chunk in response.iter_content(chunk_size=None):
                 if not chunk:
-                    return "No response found"
+                    break
                 
                 print(chunk, end="", flush=True)
                 time.sleep(0.04)  # 40ms delay between chunks for natural feel
@@ -49,7 +48,7 @@ def ClientChunks():
             log.exception(f"response interrupted: {e}")
             raise
             
-client = ClientChunks()            
+client = client_chunks()            
     
 #parse response
 #final_response = response.json()["answer"]
