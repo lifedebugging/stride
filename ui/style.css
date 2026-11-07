@@ -54,6 +54,7 @@ body {
 
 .mascot-toggle.running .pixel-mascot {
     animation: stride-walk 0.6s steps(4) infinite;
+    transition: none;
 }
 
 .mascot-toggle.facing-left .pixel-mascot {

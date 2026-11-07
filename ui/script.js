@@ -15,6 +15,7 @@ function closeSidebar() {
 
 function setSidebarOpen(isOpen) {
     clearTimeout(mascotTurnTimer);
+    mascotTurnTimer = undefined;
     drawer.classList.toggle('open', isOpen);
     drawer.setAttribute('aria-hidden', String(!isOpen));
     toggleBtn.setAttribute('aria-expanded', String(isOpen));
@@ -35,14 +36,16 @@ historyItems.forEach(item => {
 toggleBtn.addEventListener('transitionend', event => {
     if (event.target === toggleBtn && event.propertyName === 'transform') {
         toggleBtn.classList.remove('running');
-        if (drawer.classList.contains('open')) {
-            mascotTurnTimer = setTimeout(() => {
-                if (drawer.classList.contains('open')) {
+        const isOpen = drawer.classList.contains('open');
+
+        mascotTurnTimer = setTimeout(() => {
+            if (drawer.classList.contains('open') === isOpen && !toggleBtn.classList.contains('running')) {
+                if (isOpen) {
                     toggleBtn.classList.add('facing-left');
+                } else {
+                    toggleBtn.classList.remove('facing-left');
                 }
-            }, 500);
-        } else {
-            toggleBtn.classList.remove('facing-left');
-        }
+            }
+        }, 500);
     }
 });
