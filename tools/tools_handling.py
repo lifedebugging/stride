@@ -23,6 +23,7 @@ async def tool_call():
     try:
         client = MultiServerMCPClient(connections)
         tools = await client.get_tools()
+        
     except Exception as e:
         log.exception(f"Tool discovery failed {e}")
         raise
