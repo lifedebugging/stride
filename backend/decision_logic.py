@@ -92,7 +92,7 @@ async def resolve_intent(
         
         if not keyword_results :
             log.error("Keyword result is empty")
-            return _fallback(ctx)
+            return _fallback(ctx if ctx is not None else {})
             
         return _pack(keyword_results[0], "keyword")
         # future change : add the timeout for both the keyword and semantic if taking too long to answer less than 3.0 sec
@@ -105,10 +105,10 @@ async def resolve_intent(
             log.info("Semantic result is empty initiating fallback to Classifier")
             classifier_result = await safe_llm_classifier(query)
             
-            if not classifier_result:
+            if classifier_result is None:
                 log.info("classifier result is empty during Semantic fallback")
                 return _fallback(ctx)
-                
+                    
             return _pack(classifier_result.model_dump(), "classifier")
             
         return _pack(semantic_results[0], "semantic")
@@ -117,12 +117,12 @@ async def resolve_intent(
     if length_tier == QueryLength.LONG:
         classifier_result = await safe_llm_classifier(query)
         
-        if not classifier_result:
+        if classifier_result is None:
             log.info("classifier result is empty")
             return _fallback(ctx)
         
         try:
-            return _pack(classifier_result.model_dump(), "llm")
+            return _pack(classifier_result.model_dump(), "classifier")
         except Exception as e:
             log.exception(f"classifier failed to fetch intent: {e}")
 
