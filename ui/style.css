@@ -1,0 +1,98 @@
+body {
+    background-color: #808836;
+    /* Your locked-in main background color */
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    color: #1F3323;
+}
+
+/* Full screen side-by-side layout */
+.app-layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left sidebar slot */
+.sidebar {
+    width: 60px;
+    background-color: #1F3323;
+    border-right: 2px solid #364f3a;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.sidebar-icon {
+    color: #808836;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Main screen workspace */
+.main-workspace {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Centers the logo and input vertically */
+    align-items: center;
+    /* Centers everything horizontally */
+    padding: 2rem;
+}
+
+/* Center Stride Pixel Logo placeholder */
+.center-stride-logo h1 {
+    font-size: 3rem;
+    color: #1F3323;
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+}
+
+/* Response text area */
+.chat-messages {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 1.5rem;
+}
+
+/* The carved-out input box matching your drawing */
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    background-color: #1F3323;
+    /* Carved-out dark green background */
+    border: 2px solid #364f3a;
+    /* Defined border outline */
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.chat-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: #e2f5ec;
+    font-family: monospace;
+    font-size: 1rem;
+    outline: none;
+    padding: 0.5rem;
+}
+
+.send-btn {
+    background-color: #364f3a;
+    color: #e2f5ec;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-family: monospace;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.send-btn:hover {
+    background-color: #46664c;
+}
