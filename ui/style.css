@@ -13,49 +13,51 @@ body {
     height: 100vh;
 }
 
-/* Left sidebar slot */
 .sidebar {
+    display: none;
+}
+
+.mascot-toggle {
     position: fixed;
     top: 1.5rem;
     left: 1.5rem;
-    z-index: 100;
-    width: 60px;
-    background-color: #1F3323;
-    border-right: 2px solid #364f3a;
-    padding: 1rem;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    /* Pushes top to top, footer to bottom */
-    align-items: center;
-}
-
-.sidebar-icon {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    outline: none;
     z-index: 110;
-    position: relative;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transform: translateX(14px);
+    transition: transform 0.6s ease-in-out;
 }
 
-.sidebar-logo-img {
-    width: 36px;
-    height: 36px;
+.pixel-mascot {
+    width: 24px;
+    height: 24px;
+    display: block;
+    background-image: url("../assets/stride-mascot-running.png");
+    background-repeat: no-repeat;
     image-rendering: pixelated;
-    transition: transform 0.4s ease-in-out;
+    transform: scaleX(1);
+    transition: transform 0.35s ease;
 }
 
-/* Clockwise spin when opening drawer */
-.sidebar-logo-btn.open .sidebar-logo-img {
-    transform: rotate(180deg);
+.mascot-toggle.open {
+    transform: translateX(214px);
 }
 
-/* Counter-clockwise spin when closing drawer */
-.sidebar-logo-btn.close-anim .sidebar-logo-img {
-    transform: rotate(0deg);
+@keyframes stride-walk {
+    from { background-position: 0px 0px; }
+    to { background-position: -96px 0; }
+}
+
+.mascot-toggle.running .pixel-mascot {
+    animation: stride-walk 0.6s steps(4) infinite;
+}
+
+.mascot-toggle.facing-left .pixel-mascot {
+    transform: scaleX(-1);
 }
 
 /* Sliding dark green sidebar drawer */
@@ -71,7 +73,7 @@ body {
     border-right: 2px solid #364f3a;
     padding: 5rem 1.5rem 2rem 1.5rem;
     box-sizing: border-box;
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: left 0.6s ease-in-out;
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
     z-index: 105;
 }
@@ -102,6 +104,7 @@ body {
 .history-item:hover {
     background-color: #364f3a;
 }
+
 /* Styling for sidebar options */
 .new-chat-btn {
     width: 100%;
@@ -183,6 +186,12 @@ body {
     /* Preserves aspect ratio */
     image-rendering: pixelated;
     /* Keeps retro pixels crisp */
+    transform: scale(1);
+    transition: transform 0.6s ease-in-out;
+}
+
+.mascot-toggle.open ~ .main-workspace .logo-img {
+    transform: scale(0.82);
 }
 
 /* Response text area */
@@ -205,6 +214,12 @@ body {
     padding: 0.5rem;
     border-radius: 4px;
     box-sizing: border-box;
+    transform: scale(1);
+    transition: transform 0.6s ease-in-out;
+}
+
+.mascot-toggle.open ~ .main-workspace .chat-input-area {
+    transform: scale(0.87);
 }
 
 .chat-input {
