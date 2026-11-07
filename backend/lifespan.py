@@ -107,7 +107,7 @@ async def lifespan(app: FastAPI):
             await pool.close()
             log.info("connection pool status: closed")
             
-def get_ctx(request: Request) -> AppStateContext:
+def get_appctx(request: Request) -> AppStateContext:
     """Dependency provider to safely access app state."""
     return request.state.context
 
