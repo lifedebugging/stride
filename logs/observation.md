@@ -993,3 +993,10 @@ The type hint by itself doesn't change how the database works. `kwargs={"row_fac
 tryna make some minor changes
 
 naming conventions stuff etc, might as well change few variable names as well because some are just outright confusing to me
+
+
+# obervation
+
+new headache
+DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
+  from langchain_community.document_loaders import PyPDFLoader
