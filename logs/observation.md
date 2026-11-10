@@ -1012,3 +1012,31 @@ because ~
 pypdf	Slow	Ultra-lightweight (Pure Python, zero native dependencies)	Simple page scripts, basic text extraction, restrictive environments	BSD-3
 PyMuPDF	Blazing Fast (Written in C, 5x–10x faster)	Heavy (Requires compiling or pre-built C wheels)	High-performance text parsing, rendering, and heavy lifting	AGPL-3.0 / Commercial
 pdfplumber	Slow / High Memory	Medium	Complex layout analysis and precise table extraction
+
+and since the bm25 retriever were also the part of frozen community now its time to maybe look for alt
+
+i do have some in mind like ElasticSearchStore it does better but again what i am doing is `application level` workaround not a true database level hybrid search.
+
+# observation 
+the prblem with classic bm25 + chroma 
+1. You have to feed your text documents into Chroma and separately feed them into the Python-based BM25 matrix. You are essentially managing two databases.
+2. Every time a user types a query, your LangChain app fires two completely independent network requests (one vector query to Chroma, one keyword query to your BM25 matrix).
+3. Because the legacy Python BM25Retriever keeps the exact text tokens and document frequencies entirely in your server's RAM, your app container's memory footprint will balloon out of control as your data grows
+
+so i might transit to elastic search which does 
+```
+Your App  ─── (Single Query) ───►  Elasticsearch DB
+                                      ├── 1. Computes Vector Distance
+                                      ├── 2. Computes Lucene BM25 
+                                      └── 3. Merges via RRF *on the metal*
+Your App  ◄── (Sorted Top K) ────  Elasticsearch DB
+```
+single network round trip, true text normalization
+
+```
+classic                                     elasticsearch
+Your Application's Python Memory 🐍	    Inside the Database Engine 🗄️
+2 distinct queries per search	             1 single query per search
+Extremely High (scales with document count)	Minimal (offloaded to database cluster)
+Basic whitespace tokenization	               Professional stemmers, synonyms, & typo handling
+```
