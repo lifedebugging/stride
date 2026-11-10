@@ -5,13 +5,14 @@ from pathlib import Path
 from langchain.agents import create_agent
 from langchain_chroma import Chroma
 from langchain_classic.retrievers import EnsembleRetriever
-from langchain_community.document_loaders import PyPDFLoader
+from pypdf import PdfReader
 from langchain_community.retrievers import BM25Retriever
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from nltk.tokenize import word_tokenize
+from langchain_core.documents import Document
 
 from config.error_handler import retry_with_backoff
 from config.logging_handler import get_logger
@@ -27,14 +28,22 @@ VECTORDB_DIR = Path(__file__).resolve().parent.parent / "config"
 # DOCUMENT INDEXING & RETRIEVAL
 def Indexing():
     """Initialize document loader, splitter, embeddings, and vector store."""
-    # Document loader
-    loader = PyPDFLoader(
-        file_path=Path(r"D:\Documents/Project_x/x v5/eit-digital-artificial-intelligence-report.pdf"),
-        mode="single",
-        extract_images=False,
-        extraction_mode="layout",
+    # updated : document loader 
+    def load_pdf_pages(file_path: str) -> list[Document]:
+        reader = PdfReader(file_path)
+        return [
+            Document(
+                page_content=page.extract_text() or "",
+                metadata={"source": file_path, "page": i},
+            )
+            for i, page in enumerate(reader.pages)
+        ]
+    
+    file_path =(
+        "D:/Documents/Project_x/x v5/eit-digital-artificial-intelligence-report.pdf"
     )
-    documents = loader.load()
+    documents = load_pdf_pages(file_path)
+    
 
     # Text splitter
     splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
