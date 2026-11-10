@@ -6,7 +6,7 @@ from langchain.agents import create_agent
 from langchain_chroma import Chroma
 from langchain_classic.retrievers import EnsembleRetriever
 from pypdf import PdfReader
-from langchain_community.retrievers import BM25Retriever
+from langchain_classic.retrievers import BM25Retriever
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
 from langchain_huggingface import HuggingFaceEmbeddings
