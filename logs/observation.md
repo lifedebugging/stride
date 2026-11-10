@@ -1000,3 +1000,15 @@ naming conventions stuff etc, might as well change few variable names as well be
 new headache
 DeprecationWarning: `langchain-community` is being sunset and is no longer actively maintained. See https://github.com/langchain-ai/langchain-community/issues/674 for details and migration guidance toward standalone integration packages.
   from langchain_community.document_loaders import PyPDFLoader
+
+# observation
+
+since its depreciated i m gonna install it standalone
+
+any alt i was looking for but nope
+
+because ~ 
+
+pypdf	Slow	Ultra-lightweight (Pure Python, zero native dependencies)	Simple page scripts, basic text extraction, restrictive environments	BSD-3
+PyMuPDF	Blazing Fast (Written in C, 5x–10x faster)	Heavy (Requires compiling or pre-built C wheels)	High-performance text parsing, rendering, and heavy lifting	AGPL-3.0 / Commercial
+pdfplumber	Slow / High Memory	Medium	Complex layout analysis and precise table extraction
