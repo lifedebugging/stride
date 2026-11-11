@@ -123,7 +123,7 @@ async def search_docs(query: str) -> str:
 
 
 # AGENT CONFIGURATION
-def create_rag_tool():
+def rag_tool():
     model = model_endpoint(ModelTier.fast)
     if model is None:
         raise RuntimeError("No model endpoint configured for the RAG agent.")

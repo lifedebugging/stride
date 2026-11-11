@@ -192,7 +192,6 @@ async def Decision_logic(query: str,
                          ctx: AppStateContext = Depends(get_appctx)
                         ) -> Dict[str, Any]:
     
-    
     try:
         raw_query = query
         normalized = normalization(raw_query)
