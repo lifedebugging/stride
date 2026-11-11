@@ -59,10 +59,17 @@ async def main(query : Query,  ctx: AppStateContext) -> AsyncIterator[str]:
     
              
 if __name__ == "__main__":
-    host = os.getenv("HOST", "127.0.0.1")
+    host = os.getenv("HOST", "0.0.0.0")
     port = int(os.getenv("PORT", "8001"))
+    is_dev = os.getenv("ENV", "production").lower() == "development"
+
     try:
-        uvicorn.run("main:app", host=host, port=port, reload=True)
+        uvicorn.run(
+            "agent:app",
+            host=host,
+            port=port,
+            reload=is_dev,
+        )
     except Exception as e:
-        log.exception(f"an error occurred: {e}") 
+        log.exception("An error occurred while starting the server: %s", e)
 
