@@ -12,7 +12,7 @@ from config.model_config import model_endpoint, MODEL_MAP
 from langchain.agents import create_agent
 from prompt.system_prompt import ReadOnly
 from tools.tools_handling import tool_call
-from tools.rag_agent_tool import create_rag_tool
+from tools.rag_agent_tool import rag_tool
 from dotenv import load_dotenv
 from config.logging_handler import get_logger
 
@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
         log.info("checkpointer connection successful")
 
         tools = await tool_call()
-        tools.append(create_rag_tool())
+        tools.append(rag_tool())
 
         sys_prompt = ReadOnly()
         agent_lookup = {}
