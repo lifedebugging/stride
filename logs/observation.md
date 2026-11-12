@@ -1040,3 +1040,15 @@ Your Application's Python Memory 🐍	    Inside the Database Engine 🗄️
 Extremely High (scales with document count)	Minimal (offloaded to database cluster)
 Basic whitespace tokenization	               Professional stemmers, synonyms, & typo handling
 ```
+
+# observation
+
+last time my response was cut short two times because of gemini model being busy
+
+ chunk = b' you applying right before it went dark?'                                                                                                          │         │
+│ │        e = ChunkedEncodingError(ProtocolError('Response ended prematurely'))                                                                                    │         │
+│ │      end = 28.497125800000504                                                                                                                                   │         │
+│ │    query = {'query': 'My SwiftUI preview crashes with purple modifier error help me with it or else du'+1, 'thread_id': '1bd2bb70-fb14-4a32-b3c9-37dde253b277'} │         │
+│ │ response = <Response [200]>                                                                                                                                     │         │
+│ │    start = 42131.8693106      
+gotta fix this gracefully
