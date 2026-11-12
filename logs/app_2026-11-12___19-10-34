@@ -1,0 +1,11 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.9, pytest-9.2.0, pluggy-1.7.0
+rootdir: d:\Documents\stride
+configfile: pyproject.toml
+plugins: anyio-4.15.1, langsmith-0.14.16, platformdirs-4.14.0
+collected 1 item
+
+tests\test_system_prompt.py .                                            [100%]
+
+============================== 1 passed in 0.04s ==============================
+Finished running tests!
