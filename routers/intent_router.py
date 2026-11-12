@@ -26,10 +26,17 @@ This is a json file used as a dataset
 in semantic router
 """
 
-DATASET_DIR = Path('D:/Documents/stride/utils/semantic_registry.json')
 
-with open(DATASET_DIR, 'r', encoding='utf-8') as file:
-    semantic_dataset  = json.load(file)
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATASET_DIR = BASE_DIR / "utils"
+DATASET_PATH = DATASET_DIR / "semantic_registry.json"
+
+try:
+    with DATASET_PATH.open("r", encoding="utf-8") as file:
+        semantic_dataset = json.load(file)
+except FileNotFoundError:
+    log.error(f"Semantic dataset file not found at {DATASET_PATH}")
+    raise
     
 # stopwords
 """
@@ -91,7 +98,7 @@ try:
         embeddings,
         )
 except Exception as e:
-    log.exception("vector store build failed", error=str(e))
+    log.exception(f"vector store build failed {e}")
     raise
 
 # retriever
@@ -110,7 +117,7 @@ It filters the query string in various ways
 such as lower casing, filtering out the stopwords
 """
 
-def Preproccessing(query: str):
+def Preproccessing_bm25(query: str):
     # normalization
     normalized_uni_query = unicodedata.normalize('NFKC', query)
     # lower case
@@ -129,7 +136,7 @@ and custom preprocess function
 bm25_retriever  = BM25Retriever.from_documents(
     documents,
     k = 10,
-    preprocess_func=Preproccessing
+    preprocess_func=Preproccessing_bm25
     )
 
 ensemble_retriever = EnsembleRetriever(
@@ -179,7 +186,7 @@ using the three different types of filteration method
 the result of the is function will be used in keyword_intent
 to calculate confidence"""
 
-def filtering(query: str):
+def filter_query_tokens(query: str):
 
     # normalization
     normalized_uni_query = unicodedata.normalize('NFKC', query)
@@ -191,15 +198,15 @@ def filtering(query: str):
         if word.isalpha() and word not in stop_words]
     
     # If the query is completely erased, return original tokens
-    if not (len(filtered_tokens) == 0):
-        log.debug(f"filtered tokens: {tokens}")
+    if filtered_tokens:
+        log.debug(f"filtered tokens: {filtered_tokens}")
         return filtered_tokens
     
     log.debug(f"tokens: {tokens}")
+    # Return the original tokens as a list, required for counting meaningful words in the denominator.
     return tokens      
-    #list required for counting meaningful words in denominator.
- 
- #normalization    
+
+# normalization    
 def normalization(query : str):
     """
     Specifically to normalizer query that will be compared with keywords so to compare with keyword u need keywords
@@ -216,8 +223,7 @@ def normalization(query : str):
     
     return normalized_uni_query 
 
-# test_norm = normalization("what's up")
-# print(test_norm)
+
 #keyword searching for intent
 def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
     """
@@ -232,7 +238,7 @@ def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
     Empty list if no match(fall through to LLM fallback).
     """ 
     user_query = normalization(query)
-    filtered_token = filtering(query)
+    filtered_token = filter_query_tokens(query)
     
     #step 2 - scores for each directory
     scores = {} 
@@ -280,8 +286,6 @@ def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
     sorted_scores = sorted(scores.values(), key=lambda x: x["confidence"], reverse=True)
     return sorted_scores[:top_k]
 
-# test = keyword_intent("good morning")
-# print(test)
 
 # Map category names to their positive examples list
 pos_lookup = {
@@ -395,7 +399,9 @@ def semantic_intent(query: str) -> List[Dict]:
         return semantic_res(best_cat, best_score)
     
     return stage2_rerank(query, sims, ranked[:2])
-  
+
+test = semantic_intent("Create a CSS Grid layout for a photo gallery")
+print(test)
     # try:
     #     results = ensemble_retriever.invoke(query)
     # except Exception as e:
