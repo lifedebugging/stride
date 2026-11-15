@@ -104,7 +104,7 @@ def model_endpoint(tier):
         groq_model = ChatOpenAI(
             model=config.model_name,
             api_key=keys.groq_api_key,
-            base_url="https://api.groq.com/openai/v2",
+            base_url="https://api.groq.com/openai/v1",
             temperature=config.temperature
         )
         
