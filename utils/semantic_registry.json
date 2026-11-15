@@ -91,7 +91,7 @@
             "My SvelteKit form action returns 500 but error is swallowed"
         ],
         "model": "Smart",
-        "threshold": 0.39,
+        "threshold": 0.59,
         "tool": null
     },
     {
@@ -200,7 +200,7 @@
             "Create a Python descriptor protocol example for validated attributes"
         ],
         "model": "Smart",
-        "threshold": 0.37,
+        "threshold": 0.57,
         "tool": null
     },
     {
@@ -313,7 +313,7 @@
             "Explain how a reverse proxy differs from a forward proxy"
         ],
         "model": "Smart",
-        "threshold": 0.34,
+        "threshold": 0.54,
         "tool": null
     },
     {
@@ -413,7 +413,7 @@
             "My Redis cache has thundering herd implement probabilistic early refresh"
         ],
         "model": "Smart",
-        "threshold": 0.37,
+        "threshold": 0.47,
         "tool": null
     },
     {
