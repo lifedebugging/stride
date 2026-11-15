@@ -295,7 +295,7 @@ pos_lookup = {
 
 # If your semantic_registry.json missing an explicit threshold key, fallback to a defaults 
 normalized_threshold = {
-        item["name"]: item.get("threshold", 0.34) for item in semantic_dataset
+        item["name"]: item.get("threshold", 0.45) for item in semantic_dataset
     }
 
 # model and tool lookup  
@@ -318,6 +318,7 @@ cat_array = np.array(cats)
 
 GAP_MIN_COSINE = 0.20   # starting guess for MiniLM cosines — replace with calibrated value
 GAP_MIN_RANKER = 0.15
+
 indices_by_category = {c: np.where(cat_array == c)[0] for c in set(cats)}
 
 def semantic_res(best_cat, best_score) -> List[Dict[str, Any]]:
@@ -356,14 +357,18 @@ def stage2_rerank(query: str, sims: np.ndarray, ranked) -> List[Dict[str, Any]]:
     duration = end - start
     log.debug(f"execution time stage2: {duration:.2f}seconds")
     
-    per_cat = {c: float(np.mean([s for s, 
-                                 pc in zip(rerank_scores, 
-                                           pair_cats) if pc == c])) for c in top2}
-    ranked2 = sorted(per_cat.items(), key=lambda x: -x[1])
+    ranked2 = {}
+    for c in top2:
+        rerank_scores_for_c = [s for s, pc in zip(rerank_scores, pair_cats) if pc == c]
+        if rerank_scores_for_c:
+            ranked2[c] = float(np.mean(rerank_scores_for_c))
+        else:
+            ranked2[c] = 0.0
     
     log.debug(f"ranked 2 : {ranked2}")
-    top_cat, top_score = ranked2[0]
-    _ , second_score = ranked2[1]
+    ranked2_items = list(ranked2.items())
+    top_cat, top_score = ranked2_items[0]
+    _, second_score = ranked2_items[1]
     
     gap = top_score - second_score
 
@@ -402,8 +407,7 @@ def semantic_intent(query: str) -> List[Dict]:
     
     return stage2_rerank(query, sims, ranked[:2])
 
-test = semantic_intent("What is the hardest natural mineral on the Mohs scale?][-]")
-print(test)
+
     # try:
     #     results = ensemble_retriever.invoke(query)
     # except Exception as e:
