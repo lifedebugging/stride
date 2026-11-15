@@ -1052,3 +1052,13 @@ last time my response was cut short two times because of gemini model being busy
 │ │ response = <Response [200]>                                                                                                                                     │         │
 │ │    start = 42131.8693106      
 gotta fix this gracefully
+
+
+# observation
+
+the semantic router being unpredictable again i made few changes
+
+1. i was using avg of top results such as np.mean(np.sort(result)) now it is np.max() to get the max result out
+2. some naming convention changes 
+3. there was some error in stage 2 so that as well it was about sending best_cat to the normalized_threshold but due to typo it was score.
+4. 
