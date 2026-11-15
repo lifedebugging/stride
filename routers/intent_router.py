@@ -243,17 +243,19 @@ def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
     #step 2 - scores for each directory
     scores = {} 
     
+    def keyword_in_query(keyword: str, query: str) -> bool:
+        """
+        Checks if the keyword exists as a standalone word or phrase in the query.
+        """
+        return re.search(r'\b' + re.escape(keyword) + r'\b', query) is not None
+
     #step 1 - The multi-keyword scan
     for category, data in INTENT_REGISTRY.items():
         matched = []
-        
         score = []
-        
         for keyword in data["keywords"]:
-            
-            if re.search(r'\b'  + re.escape(keyword) + r'\b', user_query):  #'\b' at the start and end make sure it match the exact keyword and re.escape is to automatically escape special characters/punctuation
+            if keyword_in_query(keyword, user_query):
                 weight = len(keyword.split())
-        
                 score.append(weight)
                 matched.append(keyword)
         """
@@ -269,14 +271,13 @@ def keyword_intent(query : str, top_k: int=1)-> List[Dict]:
         # Find the confidence
         confidence = sum(score) / len(filtered_token)        
         if confidence > 0.75:
-            
-            
             scores[category] = {
                     "category": category,
                     "confidence": round(min(confidence, 0.99), 2),
                     "model": data["model"],
                     "tool": data["tool"],
                 }
+                
         
     if not scores:
         log.warning(f"Keyword scores is empty")
