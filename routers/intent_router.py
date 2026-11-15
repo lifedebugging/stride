@@ -315,8 +315,8 @@ emb_matrix = np.array(embeddings.embed_documents(texts))
 emb_matrix /= np.linalg.norm(emb_matrix, axis=1, keepdims=True) 
 cat_array = np.array(cats)
 
-GAP_MIN = 0.20   # starting guess for MiniLM cosines — replace with calibrated value
-
+GAP_MIN_COSINE = 0.20   # starting guess for MiniLM cosines — replace with calibrated value
+GAP_MIN_RANKER = 0.15
 indices_by_category = {c: np.where(cat_array == c)[0] for c in set(cats)}
 
 def semantic_res(best_cat, best_score) -> List[Dict[str, Any]]:
@@ -338,7 +338,8 @@ def stage2_rerank(query: str, sims: np.ndarray, ranked) -> List[Dict[str, Any]]:
     Ambiguous case only: rerank top-3 examples of the top-2 categories — 6 pairs, not 75.
     """
     top2 = [c for c, _ in ranked]
-
+    
+    start = time.perf_counter() 
     pairs, pair_cats = [], []
     for c in top2:
         idx = np.where(cat_array == c)[0]
@@ -347,7 +348,7 @@ def stage2_rerank(query: str, sims: np.ndarray, ranked) -> List[Dict[str, Any]]:
             pairs.append([query, texts[i]])
             pair_cats.append(c)
     
-    start = time.perf_counter()        
+           
     rerank_scores = encoder_model.predict(pairs)   # your existing model, logit scale
     
     end = time.perf_counter()
@@ -366,12 +367,12 @@ def stage2_rerank(query: str, sims: np.ndarray, ranked) -> List[Dict[str, Any]]:
     gap = top_score - second_score
 
     # YOUR existing numbers — same scorer, same scale as your current code
-    if top_score >= normalized_threshold[top_score] and gap >= GAP_MIN:
+    if top_score >= normalized_threshold[top_cat] and gap >= GAP_MIN_RANKER:
         return semantic_res(top_cat, top_score)
     return []   # genuinely ambiguous → escalates to LLM/agent downstream
     
 def semantic_intent(query: str) -> List[Dict]:
-    
+    start = time.perf_counter() 
     q = np.array(embeddings.embed_query(query))
     q /= np.linalg.norm(q)
     
@@ -380,9 +381,9 @@ def semantic_intent(query: str) -> List[Dict]:
     per_cat = {}
     # stage1_rank 
     for c, idx in indices_by_category.items():
-        per_cat[c] = float(np.mean(np.sort(sims[idx])[::-1][:3]))
+        per_cat[c] = float(np.max(sims[idx]))
         
-    start = time.perf_counter()     
+        
     ranked = sorted(per_cat.items(), key=lambda x: -x[1])
     end = time.perf_counter()
     
@@ -390,17 +391,17 @@ def semantic_intent(query: str) -> List[Dict]:
     log.debug(f"execution time stage1: {duration:.2f}seconds")
     
     log.debug(f"ranked 1 {ranked}")
-    best_cat, best_score = ranked[0]
+    best_cat, top_score = ranked[0]
     _ , second_score = ranked[1]
-    gap = best_score - second_score
+    gap = top_score - second_score
 
     
-    if best_score > normalized_threshold[best_cat] and gap >= GAP_MIN:
-        return semantic_res(best_cat, best_score)
+    if top_score > normalized_threshold[best_cat] and gap >= GAP_MIN_COSINE:
+        return semantic_res(best_cat, top_score)
     
     return stage2_rerank(query, sims, ranked[:2])
 
-test = semantic_intent("Create a CSS Grid layout for a photo gallery")
+test = semantic_intent("What is the hardest natural mineral on the Mohs scale?][-]")
 print(test)
     # try:
     #     results = ensemble_retriever.invoke(query)
