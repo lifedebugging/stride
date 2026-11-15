@@ -2224,7 +2224,7 @@
             "Do you have a mobile app?"
         ],
         "model": "Fast",
-        "threshold": 0.32,
+        "threshold": 0.42,
         "tool": null
     },
     {
@@ -2763,7 +2763,7 @@
             "\ud83d\udcaf\ud83d\udcaf\ud83d\udcaf"
         ],
         "model": "Fast",
-        "threshold": 0.3,
+        "threshold": 0.4,
         "tool": null
     },
     {
@@ -2817,7 +2817,7 @@
             "Update it with the new numbers"
         ],
         "model": "Smart",
-        "threshold": 0.36,
+        "threshold": 0.46,
         "tool": null
     },
     {
@@ -2870,7 +2870,7 @@
             "Should I learn Go or Rust for backend development?"
         ],
         "model": "Smart",
-        "threshold": 0.3,
+        "threshold": 0.4,
         "tool": null
     }
 ]
