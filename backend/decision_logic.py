@@ -92,14 +92,14 @@ async def resolve_intent(
         
         if not keyword_results :
             log.error("Keyword result is empty")
-            return _fallback(ctx if ctx is not None else {})
             
+            if not semantic_results:
+                return _fallback(ctx)
+            
+            return _pack(semantic_results[0], "semantic")
+                
         return _pack(keyword_results[0], "keyword")
-        # future change : add the timeout for both the keyword and semantic if taking too long to answer less than 3.0 sec
-        # elif semantic_results and semantic_results[0].get("confidence", 0.0) >= 0.34: 
-        #     return _pack(semantic_results[0], "semantic")
-       
-    
+        
     if length_tier == QueryLength.MEDIUM:
         if not semantic_results :
             log.info("Semantic result is empty initiating fallback to Classifier")
@@ -144,13 +144,16 @@ def _pack(raw: Dict[str, Any],
 
 def _fallback(ctx: Any) -> IntentResult:
     """Guaranteed safe fallback state"""
-    return IntentResult(
+    result = IntentResult(
         category="fallback",
         confidence=0.0,
         model="Fast",
         tool="None",
         source="fallback"
     )
+    if not isinstance(result, IntentResult):
+        raise TypeError("_fallback must return an IntentResult dataclass instance")
+    return result
 
 def predict_language(text: str, 
                      ctx: AppStateContext = Depends(get_appctx), 
@@ -162,31 +165,29 @@ def predict_language(text: str,
     return [l.replace("__label__", "") for l in label]
 
 
-async def IntentCall(func: Callable[..., Any],
-                                   *args, 
-                                   timeout,
-                                   log_label = None,
-                                   ):
-            
-            if not log_label :
-                log_label = func.__name__    
-                
-                        
-            try:
-                results = await asyncio.wait_for(
-                    asyncio.to_thread(func, *args),
-                    timeout=timeout
-                    )
-                print(results)
-                return results
-                
-            except asyncio.TimeoutError:
-                log.exception(f"{log_label} intent timed out", timeout=timeout)
-                return None
-            
-            except Exception as e:
-                log.exception(f"{log_label} failed: {e}")
-                return None
+async def intent_call(
+    func: Callable[..., Any],
+    *args, 
+    timeout: float = 3.0,
+    log_label=None,
+):
+    if not log_label:
+        log_label = func.__name__    
+
+    try:
+        results = await asyncio.wait_for(
+            asyncio.to_thread(func, *args),
+            timeout=timeout
+        )
+        return results
+
+    except asyncio.TimeoutError:
+        log.exception(f"{log_label} intent timed out", timeout=timeout)
+        return None
+
+    except Exception as e:
+        log.exception(f"{log_label} failed: {e}")
+        return None
 
 async def Decision_logic(query: str,
                          ctx: AppStateContext = Depends(get_appctx)
@@ -197,15 +198,15 @@ async def Decision_logic(query: str,
         normalized = normalization(raw_query)
 
         try:
-            lang_results = predict_language(normalized, ctx)
+            lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
             lang = lang_results[0]
             
             if "en" not in lang:
-                log.info("Not an English")
+                log.info("No English language detected")
                 return asdict(_fallback(ctx))
             
         except Exception as e:
-            log.error(f"Language detection failed, proceeding as English. Error : {e}")
+            log.exception(f"Language detection failed, proceeding as English. Error : {e}")
             
         length_tier = classify_query_length(normalized)
         
@@ -213,32 +214,35 @@ async def Decision_logic(query: str,
         
         # Check the length tier to conditionally invoke the correct intent
         if length_tier == QueryLength.SHORT:
-            keyword_results = await IntentCall(
+            keyword_results = await intent_call(
                 keyword_intent, normalized, timeout=1.5
             )
             
             semantic_results = None  # Or skip entirely depending on your needs
         elif length_tier == QueryLength.MEDIUM:
-            semantic_results = await IntentCall(
-                semantic_intent, normalized, timeout=30.0
+            semantic_results = await intent_call(
+                semantic_intent, normalized, timeout=5.0
             )
         
   
         result = await resolve_intent(
             query=normalized,
             keyword_results = keyword_results,
-            #check what keyword_results return for knowing what it actually return similarly semantic
+            # Pass the results from keyword and semantic intent detection to resolve_intent
             semantic_results = semantic_results,
             # why length_tier here is being calculated then it again returning by reslove intent as QueryLength
             length_tier=length_tier,
             ctx=ctx,
         )
-        # where is even result is being used?
+        # The result variable holds the resolved intent and is returned as a dictionary below.
         
+        if not isinstance(result, IntentResult):
+            log.error("resolve_intent did not return an IntentResult, using fallback.")
+            return asdict(_fallback(ctx))
+
         return asdict(result)
- 
     except Exception as e:
-        log.exception(f"catastrophic failure in decision logic: {e}")
+        log.exception(f"Exception in decision logic: {e}")
         return asdict(_fallback(ctx))
-        
+    
 
