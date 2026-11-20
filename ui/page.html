@@ -83,11 +83,12 @@
                 </header>
                 </div>
 
-                
-                <div class="chat-input-area">
+                <div class="chat-messages" aria-live="polite"></div>
+
+                <form class="chat-input-area">
                     <input type="text" placeholder="Type a message..." class="chat-input" />
                     <button type="submit" class="send-btn">Send</button>
-                </div>
+                </form>
 
 
             <!-- Google Sign-In Button Container -->
@@ -113,6 +114,6 @@
         
 
         <script src="script.js" defer></script>
-        <script type="module" src="server.js" defer></script>
+        <script type="module" src="generated/server.js" defer></script>
     </body>
 </html>
