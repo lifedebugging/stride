@@ -1,0 +1,10 @@
+{
+  "name": "stride-ui",
+  "private": true,
+  "scripts": {
+    "build:ui": "tsc --project tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
