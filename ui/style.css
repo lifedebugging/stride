@@ -202,6 +202,21 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.chat-message {
+    margin: 0.5rem 0;
+    color: #1F3323;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.user-message {
+    text-align: right;
+}
+
+.error-message {
+    color: #8b1e1e;
+}
+
 /* The carved-out input box matching your drawing */
 .chat-input-area {
     display: flex;
