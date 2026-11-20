@@ -1,78 +1,66 @@
+import time
+
 import requests
 from config.logging_handler import get_logger
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-import time
-import uuid
-import json
-
-app = FastAPI ()
-
-thread_id = uuid.uuid4()
-thread_id_str = str(thread_id)
-
+app = FastAPI()
 log = get_logger("client.response")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8001/route"],  # Your web app's URL
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 3. Define the exact shape of the data you expect from TypeScript
+
 class ChatRequest(BaseModel):
     query: str
     thread_id: str
 
-class ChatResponse(BaseModel):
-    reply: str
 
-
-@app.post("/chat", response_model=ChatResponse)
-def chat_endpoint(request: ChatRequest):
-    
-    user_text = request.query
-    thread_id = request.thread_id
-
-    # POST to x
-    try: 
-        response = requests.post(url="http://127.0.0.1:8001/route", json=user_text, stream=True)
-        response.raise_for_status()
-    
-    except Exception as e:
-        log.exception(f"client POST failed, check url: {e}")
-        raise
-        
+def stream_response(upstream_response: requests.Response):
+    start = time.perf_counter()
     try:
-        start = time.perf_counter()
-        #iter_lines change iter_content
-        for chunk in response.iter_content(chunk_size=1024):
-            if not chunk:
-                break
-            
-            yield chunk.decode()
-            time.sleep(0.04)  # 40ms delay between chunks for natural feel
-                
-        elapsed = (time.perf_counter() - start)
-        print()
-        log.info(f"response complete, {elapsed:.2f}")
-        print()  #newline after response completes
-        
-    except Exception as e:
-        log.exception(f"response interrupted: {e}")
+        for chunk in upstream_response.iter_content(chunk_size=None):
+            if chunk:
+                yield chunk
+        log.info("response complete, %.2f", time.perf_counter() - start)
+    except requests.RequestException:
+        log.exception("response interrupted")
         raise
-    
-    StreamingResponse(chat_endpoint(user_text), media_type="text/plain")
-       
-    
-#parse response
-#final_response = response.json()["answer"]
-#no .json(). It's raw text chunks now.
-    #print answer
-    
-#iter_lines() returns bytes by default.
+    finally:
+        upstream_response.close()
 
-    
+
+@app.post("/chat")
+def chat_endpoint(payload: ChatRequest):
+    upstream_response = None
+    try:
+        upstream_response = requests.post(
+            "http://127.0.0.1:8001/route",
+            json=payload.model_dump(),
+            stream=True,
+            timeout=(5, None),
+        )
+        upstream_response.raise_for_status()
+    except requests.RequestException as exc:
+        if upstream_response is not None:
+            upstream_response.close()
+        log.exception("backend request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="Backend service unavailable",
+        ) from exc
+
+    return StreamingResponse(
+        stream_response(upstream_response),
+        media_type="text/plain",
+    )
