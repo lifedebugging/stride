@@ -8,9 +8,19 @@ if (!chatForm || !chatInput || !sendButton || !chatMessages) {
 }
 
 const messageContainer = chatMessages;
+let googleIdToken: string | null = null;
 let threadId =
     sessionStorage.getItem("stride_thread_id") || crypto.randomUUID();
 sessionStorage.setItem("stride_thread_id", threadId);
+
+window.addEventListener("stride:authenticated", (event) => {
+    const detail = (event as CustomEvent<{ credential?: unknown }>).detail;
+    if (typeof detail?.credential !== "string" || !detail.credential) {
+        throw new Error("Google sign-in did not provide an ID token.");
+    }
+
+    googleIdToken = detail.credential;
+});
 
 window.addEventListener("stride:new-chat", () => {
     threadId = crypto.randomUUID();
@@ -27,12 +37,20 @@ function appendMessage(role: "user" | "assistant" | "error", text: string): void
 async function sendToBackend(
     userMessage: string,
     currentThreadId: string,
+    credential: string,
 ): Promise<string> {
     const response = await fetch("http://127.0.0.1:8002/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${credential}`,
+        },
         body: JSON.stringify({ query: userMessage, thread_id: currentThreadId }),
     });
+    if (response.status === 401) {
+        googleIdToken = null;
+        window.dispatchEvent(new Event("stride:authentication-required"));
+    }
     if (!response.ok) {
         const detail = await response.text();
         throw new Error(`Proxy returned ${response.status}: ${detail}`);
@@ -49,13 +67,19 @@ chatForm.addEventListener("submit", async (event) => {
         return;
     }
 
+    if (!googleIdToken) {
+        appendMessage("error", "Sign in with Google before sending a message.");
+        return;
+    }
+
     appendMessage("user", query);
     chatInput.value = "";
     sendButton.disabled = true;
     const currentThreadId = threadId;
+    const credential = googleIdToken;
 
     try {
-        const reply = await sendToBackend(query, currentThreadId);
+        const reply = await sendToBackend(query, currentThreadId, credential);
         if (threadId === currentThreadId) {
             appendMessage("assistant", reply);
         }
