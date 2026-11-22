@@ -2,7 +2,7 @@ import time
 
 import requests
 from config.logging_handler import get_logger
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -41,16 +41,33 @@ def stream_response(upstream_response: requests.Response):
 
 
 @app.post("/chat")
-def chat_endpoint(payload: ChatRequest):
+def chat_endpoint(
+    payload: ChatRequest,
+    authorization: str | None = Header(default=None),
+):
     upstream_response = None
     try:
         upstream_response = requests.post(
             "http://127.0.0.1:8001/route",
             json=payload.model_dump(),
+            headers={"Authorization": authorization} if authorization else {},
             stream=True,
             timeout=(5, None),
         )
+        if upstream_response.status_code in (401, 503):
+            status_code = upstream_response.status_code
+            upstream_response.close()
+            raise HTTPException(
+                status_code=status_code,
+                detail=(
+                    "Google sign-in is required or has expired."
+                    if status_code == 401
+                    else "Google sign-in is temporarily unavailable."
+                ),
+            )
         upstream_response.raise_for_status()
+    except HTTPException:
+        raise
     except requests.RequestException as exc:
         if upstream_response is not None:
             upstream_response.close()
