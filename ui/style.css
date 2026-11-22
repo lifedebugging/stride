@@ -120,6 +120,51 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.new-chat-dialog {
+    width: min(420px, calc(100vw - 2rem));
+    padding: 1.5rem;
+    border: 2px solid #364f3a;
+    border-radius: 6px;
+    background-color: #808836;
+    color: #1F3323;
+    font-family: monospace;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+.new-chat-dialog::backdrop {
+    background: rgba(15, 25, 17, 0.65);
+}
+
+.new-chat-dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.new-chat-dialog-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.dialog-close-btn {
+    padding: 0.5rem 0.75rem;
+    border: 0;
+    border-radius: 2px;
+    background-color: #1F3323;
+    color: #e2f5ec;
+    font: inherit;
+    cursor: pointer;
+}
+
+.new-chat-dialog p {
+    margin: 1rem 0;
+}
+
+.new-chat-dialog .g_id_signin {
+    min-height: 40px;
+}
+
 /* Main screen workspace */
 .main-workspace {
     flex: 1;
