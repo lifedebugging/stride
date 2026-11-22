@@ -37,6 +37,12 @@ newChatBtn.addEventListener('click', () => {
 
 closeDialogBtn.addEventListener('click', () => newChatDialog.close());
 
+window.addEventListener('stride:authentication-required', () => {
+    if (!newChatDialog.open) {
+        newChatDialog.showModal();
+    }
+});
+
 newChatDialog.addEventListener('close', () => chatInput.focus());
 
 newChatDialog.addEventListener('cancel', event => {
