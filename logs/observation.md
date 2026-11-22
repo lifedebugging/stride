@@ -1208,3 +1208,5 @@ loaded. if the request fails, check that both Python servers are running.
 # obesrvation
 
 as of today we have working ui job resume building starts now
+
+and lastly setting up chat persistence to browse with auth
