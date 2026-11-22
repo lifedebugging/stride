@@ -109,11 +109,15 @@
 
             <script>
                 function handleCredentialResponse(response) {
-                    console.log("Encoded JWT ID token: " + response.credential);
+                    if (typeof response?.credential !== "string" || !response.credential) {
+                        console.error("Google sign-in did not return an ID token.");
+                        return;
+                    }
 
-                    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-                    console.log("User Email: " + payload.email);
-                    console.log("User Name: " + payload.name);
+                    window.dispatchEvent(new CustomEvent("stride:authenticated", {
+                        detail: { credential: response.credential },
+                    }));
+                    document.getElementById("new-chat-dialog")?.close();
                 }
             </script>
 
