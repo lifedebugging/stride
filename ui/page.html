@@ -45,7 +45,7 @@
 
             <!-- Sliding drawer (hidden off-screen until opened) -->
             <nav id="sidebar-drawer" class="sidebar-drawer" aria-hidden="true">
-                <div class="drawer-header">
+                <div class="drawer-hader">
                     <button class="new-chat-btn">+ New Chat</button>
                 </div>
                 <ul class="chat-history-list">
@@ -91,27 +91,31 @@
                 </form>
 
 
-            <!-- Google Sign-In Button Container -->
-            <div id="g_id_onload" data-client_id="946934091029-n1scrsb53sps38n8vqi2uinh97orf7f0.apps.googleusercontent.com"
-                data-callback="handleCredentialResponse">
-            </div>
-            <div class="g_id_signin" data-type="standard"></div>
+            </main>
+
+            <dialog id="new-chat-dialog" class="new-chat-dialog" aria-labelledby="new-chat-title">
+                <div class="new-chat-dialog-header">
+                    <h2 id="new-chat-title">Start a new chat</h2>
+                    <button class="dialog-close-btn" type="button" aria-label="Close dialog">Close</button>
+                </div>
+                <p>Sign in to continue with your new chat.</p>
+                <div id="g_id_onload"
+                    data-client_id="946934091029-n1scrsb53sps38n8vqi2uinh97orf7f0.apps.googleusercontent.com"
+                    data-callback="handleCredentialResponse"
+                    data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin" data-type="standard"></div>
+            </dialog>
 
             <script>
                 function handleCredentialResponse(response) {
-                    // The response.credential is a JWT containing user info
                     console.log("Encoded JWT ID token: " + response.credential);
 
-                    // Decode JWT payload (simple base64 decode for testing)
                     const payload = JSON.parse(atob(response.credential.split('.')[1]));
                     console.log("User Email: " + payload.email);
                     console.log("User Name: " + payload.name);
                 }
             </script>
-
-
-            </main>
-        
 
         <script src="script.js" defer></script>
         <script type="module" src="generated/server.js" defer></script>
