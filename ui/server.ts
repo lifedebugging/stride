@@ -8,9 +8,14 @@ if (!chatForm || !chatInput || !sendButton || !chatMessages) {
 }
 
 const messageContainer = chatMessages;
-const threadId =
+let threadId =
     sessionStorage.getItem("stride_thread_id") || crypto.randomUUID();
 sessionStorage.setItem("stride_thread_id", threadId);
+
+window.addEventListener("stride:new-chat", () => {
+    threadId = crypto.randomUUID();
+    sessionStorage.setItem("stride_thread_id", threadId);
+});
 
 function appendMessage(role: "user" | "assistant" | "error", text: string): void {
     const message = document.createElement("p");
@@ -19,11 +24,14 @@ function appendMessage(role: "user" | "assistant" | "error", text: string): void
     messageContainer.appendChild(message);
 }
 
-async function sendToBackend(userMessage: string): Promise<string> {
+async function sendToBackend(
+    userMessage: string,
+    currentThreadId: string,
+): Promise<string> {
     const response = await fetch("http://127.0.0.1:8002/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: userMessage, thread_id: threadId }),
+        body: JSON.stringify({ query: userMessage, thread_id: currentThreadId }),
     });
     if (!response.ok) {
         const detail = await response.text();
@@ -44,14 +52,19 @@ chatForm.addEventListener("submit", async (event) => {
     appendMessage("user", query);
     chatInput.value = "";
     sendButton.disabled = true;
+    const currentThreadId = threadId;
 
     try {
-        const reply = await sendToBackend(query);
-        appendMessage("assistant", reply);
+        const reply = await sendToBackend(query, currentThreadId);
+        if (threadId === currentThreadId) {
+            appendMessage("assistant", reply);
+        }
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.error("Chat request failed:", error);
-        appendMessage("error", `Chat request failed: ${message}`);
+        if (threadId === currentThreadId) {
+            appendMessage("error", `Chat request failed: ${message}`);
+        }
     } finally {
         sendButton.disabled = false;
         chatInput.focus();
