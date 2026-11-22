@@ -6,12 +6,13 @@ from pydantic import BaseModel
 
 # from error_handler import retry_with_backoffs
 from config.model_config import log_routing_decision
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Header
 from fastapi.responses import StreamingResponse
 from collections.abc import AsyncIterator
 
 from  backend.lifespan import get_appctx, lifespan, AppStateContext
 from backend.decision_logic import Decision_logic
+from utils.google_auth import user_scoped_thread_id, verify_google_credential
 # from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 # from logging_handler import setup_logging, get_logger
 from config.logging_handler import get_logger 
@@ -30,10 +31,15 @@ app = FastAPI(lifespan=lifespan)
 
 #handler
 @app.post("/route")
-async def handler(query: Query, 
+async def handler(query: Query,
+                  authorization: str | None = Header(default=None),
                   ctx: AppStateContext = Depends(get_appctx),   #telling the router it's dependency
                   ):
-    
+    subject = verify_google_credential(authorization)
+    query = query.model_copy(
+        update={"thread_id": user_scoped_thread_id(subject, query.thread_id)}
+    )
+
     # StreamingResponse for streaming output
     return StreamingResponse(main(query, ctx), 
                             media_type="text/plain",
