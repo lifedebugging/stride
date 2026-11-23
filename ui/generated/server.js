@@ -10,6 +10,7 @@ if (!chatForm || !chatInput || !sendButton || !chatMessages || !chatHistoryList)
 const historyList = chatHistoryList;
 const input = chatInput;
 const messageContainer = chatMessages;
+const STREAM_CHARACTER_DELAY_MS = 20;
 function resizeChatInput() {
     input.style.height = "auto";
     const maxHeight = Number.parseFloat(getComputedStyle(input).maxHeight);
@@ -162,12 +163,12 @@ async function sendToBackend(userMessage, currentThreadId, credential, onChunk) 
             break;
         const chunk = decoder.decode(value, { stream: true });
         if (chunk) {
-            onChunk(chunk);
+            await onChunk(chunk);
         }
     }
     const finalChunk = decoder.decode();
     if (finalChunk) {
-        onChunk(finalChunk);
+        await onChunk(finalChunk);
     }
 }
 chatForm.addEventListener("submit", async (event) => {
@@ -188,15 +189,20 @@ chatForm.addEventListener("submit", async (event) => {
     const credential = googleIdToken;
     try {
         let assistantMessage = null;
-        await sendToBackend(query, currentThreadId, credential, (chunk) => {
-            if (threadId !== currentThreadId) {
-                return;
+        await sendToBackend(query, currentThreadId, credential, async (chunk) => {
+            for (const character of chunk) {
+                if (threadId !== currentThreadId) {
+                    return;
+                }
+                if (!assistantMessage) {
+                    assistantMessage = appendMessage("assistant", "");
+                }
+                assistantMessage.textContent += character;
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+                await new Promise((resolve) => {
+                    window.setTimeout(resolve, STREAM_CHARACTER_DELAY_MS);
+                });
             }
-            if (!assistantMessage) {
-                assistantMessage = appendMessage("assistant", "");
-            }
-            assistantMessage.textContent += chunk;
-            messageContainer.scrollTop = messageContainer.scrollHeight;
         });
         if (threadId === currentThreadId) {
             if (!assistantMessage) {
