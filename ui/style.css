@@ -216,15 +216,17 @@ body {
     }
 }
     
-/* State when the user is actively chatting: hides/fades the grid */
-.main-workspace.active-chat {
-    background-image: none;
-}
-
-
 /* Center Stride Pixel Logo placeholder */
 .center-stride-logo {
     margin-bottom: 2rem;
+}
+
+.main-workspace.active-chat {
+    justify-content: flex-end;
+}
+
+.main-workspace.active-chat .center-stride-logo {
+    display: none;
 }
 
 .logo-img {
@@ -246,26 +248,90 @@ body {
 
 /* Response text area */
 .chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     width: 100%;
     max-width: 600px;
+    max-height: 45vh;
     margin-bottom: 1.5rem;
+    padding: 1rem 0.5rem;
+    overflow-y: auto;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.main-workspace.active-chat .chat-messages:not(:empty) {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
 }
 
 .chat-message {
+    position: relative;
+    align-self: flex-start;
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 78%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #1F3323;
+    outline: 2px solid #808836;
+    outline-offset: -4px;
+    box-shadow: 4px 4px 0 rgba(31, 51, 35, 0.55);
+    line-height: 1.5;
     font-size: 0.95rem;
-    margin: 0.5rem 0;
-    color: #1F3323;
+    margin: 0;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
+.assistant-message {
+    background-color: #1F3323;
+    color: #e2f5ec;
+}
+
+.assistant-message::before {
+    content: "STRIDE // SYS";
+    position: absolute;
+    top: -0.75rem;
+    left: 0.5rem;
+    padding: 0.05rem 0.4rem;
+    border: 2px solid #1F3323;
+    background-color: #f4d35e;
+    color: #1F3323;
+    font-size: 0.7rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
 .user-message {
-    
-    text-align: right;
+    align-self: flex-end;
+    background-color: #364f3a;
+    color: #f4d35e;
+    outline-color: #c5b358;
+}
+
+.user-message::before {
+    content: "YOU";
+    position: absolute;
+    top: -0.75rem;
+    right: 0.5rem;
+    padding: 0.05rem 0.4rem;
+    border: 2px solid #1F3323;
+    background-color: #808836;
+    color: #1F3323;
+    font-size: 0.7rem;
+    font-weight: bold;
+    line-height: 1.2;
 }
 
 .error-message {
-    color: #8b1e1e;
+    align-self: center;
+    max-width: 100%;
+    background-color: #4a2929;
+    color: #ffd8d8;
+    outline-color: #8b1e1e;
 }
 
 /* The carved-out input box matching your drawing */
