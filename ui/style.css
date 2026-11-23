@@ -93,8 +93,12 @@ body {
 }
 
 .history-item {
+    width: 100%;
     color: #e2f5ec;
     padding: 0.75rem 0.5rem;
+    background: transparent;
+    border: 0;
+    text-align: left;
     font-family: monospace;
     font-size: 0.9rem;
     cursor: pointer;
