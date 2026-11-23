@@ -1,0 +1,256 @@
+{"event": "Db connection starting up..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 39, "level": "info", "timestamp": "2026-11-23T11:05:24.028552Z"}
+{"event": "connection pool status: open", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 59, "level": "info", "timestamp": "2026-11-23T11:05:24.028552Z"}
+{"event": "checkpointer connection successful", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 64, "level": "info", "timestamp": "2026-11-23T11:05:24.415171Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-23T11:05:32.968017Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-23T11:05:33.300895Z"}
+{"event": "loading language model..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 88, "level": "info", "timestamp": "2026-11-23T11:05:33.303896Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:12:10.006347Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:12:10.082380Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:12:10.083341Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:12:10.083341Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:14:21.824748Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:14:21.893793Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:14:21.893793Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:14:21.893793Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:17:13.085654Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:17:13.173511Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:17:13.173511Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:17:13.173511Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:17:33.898579Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:17:33.993512Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:17:33.993512Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:17:33.993512Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:17:46.312441Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:17:46.393925Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:17:46.393925Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:17:46.393925Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:18:07.881371Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:18:07.946835Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:18:07.957358Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:18:07.957358Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:18:23.841879Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Keyword scores is empty", "filename": "intent_router.py", "func_name": "keyword_intent", "lineno": 283, "level": "warning", "timestamp": "2026-11-23T11:18:23.924453Z"}
+{"event": "Keyword result is empty", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 94, "level": "error", "timestamp": "2026-11-23T11:18:23.924453Z"}
+{"category": "fallback", "confidence": 0.0, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "None", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:18:23.924453Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:18:37.947255Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"category": "MATH", "confidence": 0.99, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "calculator", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:18:38.042820Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:19:58.339538Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Semantic result is empty initiating fallback to Classifier", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 105, "level": "info", "timestamp": "2026-11-23T11:20:00.785003Z"}
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+{"category": "NEGATIVE_FEEDBACK", "confidence": 0.8, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": "none", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:20:02.347333Z"}
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:21:01.708228Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"event": "Semantic result is empty initiating fallback to Classifier", "filename": "decision_logic.py", "func_name": "resolve_intent", "lineno": 105, "level": "info", "timestamp": "2026-11-23T11:21:03.490896Z"}
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+{"category": "CAREER", "confidence": 0.9, "model_tier": "Smart", "model_id": "openai/gpt-oss-120b", "tools": "none", "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:21:04.436890Z"}
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+{"event": "Language detection failed, proceeding as English. Error : Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.", "filename": "decision_logic.py", "func_name": "Decision_logic", "lineno": 209, "level": "error", "timestamp": "2026-11-23T11:23:05.282161Z", "exception": "Traceback (most recent call last):\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 201, in Decision_logic\n    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\asyncio\\threads.py\", line 25, in to_thread\n    return await loop.run_in_executor(None, func_call)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\AppData\\Roaming\\uv\\python\\cpython-3.12.9-windows-x86_64-none\\Lib\\concurrent\\futures\\thread.py\", line 59, in run\n    result = self.fn(*self.args, **self.kwargs)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride\\backend\\decision_logic.py\", line 164, in predict_language\n    label, prob = model.predict(text, k)\n                  ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Documents\\stride_venv\\.venv\\Lib\\site-packages\\fasttext\\FastText.py\", line 228, in predict\n    return labels, np.array(probs, copy=False)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Unable to avoid copy while creating an array as requested.\nIf using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).\nFor more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword."}
+Traceback (most recent call last):
+  File "D:\Documents\stride\backend\decision_logic.py", line 201, in Decision_logic
+    lang_results = await asyncio.to_thread(predict_language, normalized, ctx)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\asyncio\threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Roaming\uv\python\cpython-3.12.9-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride\backend\decision_logic.py", line 164, in predict_language
+    label, prob = model.predict(text, k)
+                  ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+{"category": "SESSION_CONTROL", "confidence": 0.99, "model_tier": "Fast", "model_id": "gemini-3.5-flash-lite", "tools": null, "event": "routing decision", "filename": "model_config.py", "func_name": "log_routing_decision", "lineno": 81, "level": "info", "timestamp": "2026-11-23T11:23:05.465668Z"}
