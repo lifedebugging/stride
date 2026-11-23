@@ -29,6 +29,12 @@ const messageContainer = chatMessages;
 let googleIdToken: string | null = null;
 let threadId: string = crypto.randomUUID();
 
+window.addEventListener("pageshow", () => {
+    messageContainer.replaceChildren();
+    chatInput.value = "";
+    threadId = crypto.randomUUID();
+});
+
 window.addEventListener("stride:authenticated", (event) => {
     const detail = (event as CustomEvent<{ credential?: unknown }>).detail;
     if (typeof detail?.credential !== "string" || !detail.credential) {
