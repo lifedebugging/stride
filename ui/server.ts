@@ -39,7 +39,6 @@ window.addEventListener("stride:authenticated", (event) => {
     void refreshChatHistory().catch((error: unknown) => {
         const message = error instanceof Error ? error.message : String(error);
         console.error("Unable to load chat history:", error);
-        appendMessage("error", `Unable to load chat history: ${message}`);
     });
 });
 
@@ -185,7 +184,7 @@ chatForm.addEventListener("submit", async (event) => {
     }
 
     if (!googleIdToken) {
-        window.dispatchEvent(new Event("stride:authentication-required"))
+        window.dispatchEvent(new Event("stride:authentication-required"));
         return;
     }
 
@@ -209,7 +208,7 @@ chatForm.addEventListener("submit", async (event) => {
         const message = error instanceof Error ? error.message : String(error);
         console.error("Chat request failed:", error);
         if (threadId === currentThreadId) {
-            appendMessage("error", `Chat request failed: ${message}`);
+            appendMessage("error", "Chat request failed. Please try again later");
         }
     } finally {
         sendButton.disabled = false;
