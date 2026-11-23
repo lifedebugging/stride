@@ -45,9 +45,6 @@ window.addEventListener("stride:authenticated", (event) => {
 
 window.addEventListener("stride:new-chat", () => {
     threadId = crypto.randomUUID();
-    if (!googleIdToken) {
-        window.dispatchEvent(new Event("stride:authentication-required"));
-    }
 });
 
 window.addEventListener("stride:load-chat", (event) => {
@@ -188,7 +185,7 @@ chatForm.addEventListener("submit", async (event) => {
     }
 
     if (!googleIdToken) {
-        appendMessage("error", "Sign in with Google before sending a message.");
+        window.dispatchEvent(new Event("stride:authentication-required"))
         return;
     }
 
