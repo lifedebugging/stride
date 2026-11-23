@@ -356,6 +356,7 @@ body {
     transform: scale(0.85);
 }
 
+
 .chat-input {
     flex: 1;
     background-color: transparent;
@@ -365,8 +366,13 @@ body {
     font-size: 1rem;
     outline: none;
     padding: 0.5rem;
+    box-sizing: border-box;
+    min-height: 2.5rem;
+    max-height: 9rem;
+    line-height: 1.4;
+    resize: none;
+    overflow-y: auto;
 }
-
 .send-btn {
     background-color: #364f3a;
     color: #e2f5ec;
@@ -382,3 +388,4 @@ body {
 .send-btn:hover {
     background-color: #46664c;
 }
+

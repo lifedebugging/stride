@@ -13,7 +13,7 @@ if (
     !(drawer instanceof HTMLElement) ||
     !(newChatBtn instanceof HTMLButtonElement) ||
     !(chatMessages instanceof HTMLElement) ||
-    !(chatInput instanceof HTMLInputElement) ||
+    !(chatInput instanceof HTMLTextAreaElement) ||
     !(chatHistoryList instanceof HTMLUListElement) ||
     !(newChatDialog instanceof HTMLDialogElement) ||
     !(closeDialogBtn instanceof HTMLButtonElement)
