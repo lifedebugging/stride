@@ -1,5 +1,5 @@
 const chatForm = document.querySelector<HTMLFormElement>(".chat-input-area");
-const chatInput = document.querySelector<HTMLInputElement>(".chat-input");
+const chatInput = document.querySelector<HTMLTextAreaElement>(".chat-input");
 const sendButton = document.querySelector<HTMLButtonElement>(".send-btn");
 const chatMessages = document.querySelector<HTMLDivElement>(".chat-messages");
 const chatHistoryList = document.querySelector<HTMLUListElement>(
