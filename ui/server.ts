@@ -27,6 +27,7 @@ interface ChatDetails extends ChatSummary {
 }
 
 const messageContainer = chatMessages;
+const STREAM_CHARACTER_DELAY_MS = 20;
 
 function resizeChatInput(): void {
     input.style.height = "auto";
@@ -192,7 +193,7 @@ async function sendToBackend(
     userMessage: string,
     currentThreadId: string,
     credential: string,
-    onChunk: (chunk: string) => void,
+    onChunk: (chunk: string) => Promise<void>,
 ): Promise<void> {
     const response = await fetch("http://127.0.0.1:8002/chat", {
         method: "POST",
@@ -222,13 +223,13 @@ async function sendToBackend(
 
         const chunk = decoder.decode(value, { stream: true });
         if (chunk) {
-            onChunk(chunk);
+            await onChunk(chunk);
         }
     }
 
     const finalChunk = decoder.decode();
     if (finalChunk) {
-        onChunk(finalChunk);
+        await onChunk(finalChunk);
     }
 }
 
@@ -258,16 +259,21 @@ chatForm.addEventListener("submit", async (event) => {
             query,
             currentThreadId,
             credential,
-            (chunk) => {
-                if (threadId !== currentThreadId) {
-                    return;
-                }
+            async (chunk) => {
+                for (const character of chunk) {
+                    if (threadId !== currentThreadId) {
+                        return;
+                    }
 
-                if (!assistantMessage) {
-                    assistantMessage = appendMessage("assistant", "");
+                    if (!assistantMessage) {
+                        assistantMessage = appendMessage("assistant", "");
+                    }
+                    assistantMessage.textContent += character;
+                    messageContainer.scrollTop = messageContainer.scrollHeight;
+                    await new Promise<void>((resolve) => {
+                        window.setTimeout(resolve, STREAM_CHARACTER_DELAY_MS);
+                    });
                 }
-                assistantMessage.textContent += chunk;
-                messageContainer.scrollTop = messageContainer.scrollHeight;
             },
         );
 
