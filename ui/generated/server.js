@@ -11,6 +11,11 @@ const historyList = chatHistoryList;
 const messageContainer = chatMessages;
 let googleIdToken = null;
 let threadId = crypto.randomUUID();
+window.addEventListener("pageshow", () => {
+    messageContainer.replaceChildren();
+    chatInput.value = "";
+    threadId = crypto.randomUUID();
+});
 window.addEventListener("stride:authenticated", (event) => {
     const detail = event.detail;
     if (typeof detail?.credential !== "string" || !detail.credential) {
