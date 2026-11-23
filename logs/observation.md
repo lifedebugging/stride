@@ -1220,3 +1220,45 @@ and lastly setting up chat persistence to browse with auth
 - The backend validates the Google ID token; it stores the stable Google user ID and email, never the token.
 - PostgreSQL checkpoint tables and chat-history tables are initialized during backend startup.
 - Validation: 8 focused tests, `npm run build:ui`, and a browser test with mocked API responses passed. A live Google/PostgreSQL connection was not tested.
+
+
+## observation
+
+so the chat is working end to end with minor bugs such as the sign in button being always there 
+that is fixed
+
+i also made sure that the bearer token get checked with credential before sign in
+
+currently i am fixing that you cannot chat until you sign in
+
+the reason is simple its just all too much complicated for me right now
+
+so i do this:
+
+reload page when you click in to new chat signed out
+when you signed in then only it creates new thread
+type a message and click send the sign in popup window appear and the message shoudl remain in the input box
+you can sign in then click send again, only the first click pauses for sign in and it doesn't autmatically send afterward
+
+
+# observation
+
+ build step: edit server.ts, run npm run build:ui, then refresh so the page uses the updated JavaScript.
+
+ - made changes to how the browser will behave when click reload
+
+ it empty the messagContainer to pageshow handler when you reload and it keeps the chat when you accidentally close the tab
+
+made the chat box start at new line using HTMLTextAreaElement when writing big text
+
+it grows dynamically added new function resizechatiput to the .ts file and make sure it resets 
+when new chat is open
+
+in newChatBtn
+``` 
+chatInput.value = '';
+    chatInput.dispatchEvent(new Event('input'));
+```
+
+i also added auto scroll the feed to latest message like outher ai ui's
+
