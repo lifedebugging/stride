@@ -1262,3 +1262,9 @@ chatInput.value = '';
 
 i also added auto scroll the feed to latest message like outher ai ui's
 
+# observation
+
+the end to end system is working however the streaming is not taking place more like it happening in backend but not to the front end 
+
+still no browser caching so that stuff idk how am i gonna do it, it feels like too much at this point
+
