@@ -12,6 +12,7 @@ from collections.abc import AsyncIterator
 
 from  backend.lifespan import get_appctx, lifespan, AppStateContext
 from backend.decision_logic import Decision_logic
+from backend.chat_history import router as chat_history_router, store_chat_message
 from utils.google_auth import user_scoped_thread_id, verify_google_credential
 # from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 # from logging_handler import setup_logging, get_logger
@@ -28,6 +29,8 @@ class Query(BaseModel):
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(chat_history_router)
+
 
 #handler
 @app.post("/route")
@@ -35,15 +38,29 @@ async def handler(query: Query,
                   authorization: str | None = Header(default=None),
                   ctx: AppStateContext = Depends(get_appctx),   #telling the router it's dependency
                   ):
-    subject = verify_google_credential(authorization)
+    identity = verify_google_credential(authorization)
+    chat_id = query.thread_id
+    checkpoint_thread_id = user_scoped_thread_id(identity.subject, chat_id)
     query = query.model_copy(
-        update={"thread_id": user_scoped_thread_id(subject, query.thread_id)}
+        update={"thread_id": checkpoint_thread_id}
+    )
+    await store_chat_message(
+        ctx.pool, identity, chat_id, "user", query.query
     )
 
-    # StreamingResponse for streaming output
-    return StreamingResponse(main(query, ctx), 
-                            media_type="text/plain",
-                            )
+    async def stream_and_save() -> AsyncIterator[str]:
+        response_parts = []
+        async for chunk in main(query, ctx):
+            response_parts.append(chunk)
+            yield chunk
+
+        response = "".join(response_parts)
+        if response:
+            await store_chat_message(
+                ctx.pool, identity, chat_id, "assistant", response
+            )
+
+    return StreamingResponse(stream_and_save(), media_type="text/plain")
 
  
 async def main(query : Query,  ctx: AppStateContext) -> AsyncIterator[str]:
