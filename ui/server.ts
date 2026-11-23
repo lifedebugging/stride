@@ -2,16 +2,32 @@ const chatForm = document.querySelector<HTMLFormElement>(".chat-input-area");
 const chatInput = document.querySelector<HTMLInputElement>(".chat-input");
 const sendButton = document.querySelector<HTMLButtonElement>(".send-btn");
 const chatMessages = document.querySelector<HTMLDivElement>(".chat-messages");
+const chatHistoryList = document.querySelector<HTMLUListElement>(
+    ".chat-history-list",
+);
 
-if (!chatForm || !chatInput || !sendButton || !chatMessages) {
+if (!chatForm || !chatInput || !sendButton || !chatMessages || !chatHistoryList) {
     throw new Error("Chat form elements are missing from the page.");
+}
+const historyList = chatHistoryList;
+
+interface ChatSummary {
+    chat_id: string;
+    title: string;
+}
+
+interface ChatMessage {
+    role: "user" | "assistant";
+    content: string;
+}
+
+interface ChatDetails extends ChatSummary {
+    messages: ChatMessage[];
 }
 
 const messageContainer = chatMessages;
 let googleIdToken: string | null = null;
-let threadId =
-    sessionStorage.getItem("stride_thread_id") || crypto.randomUUID();
-sessionStorage.setItem("stride_thread_id", threadId);
+let threadId: string = crypto.randomUUID();
 
 window.addEventListener("stride:authenticated", (event) => {
     const detail = (event as CustomEvent<{ credential?: unknown }>).detail;
@@ -20,11 +36,32 @@ window.addEventListener("stride:authenticated", (event) => {
     }
 
     googleIdToken = detail.credential;
+    void refreshChatHistory().catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Unable to load chat history:", error);
+        appendMessage("error", `Unable to load chat history: ${message}`);
+    });
 });
 
 window.addEventListener("stride:new-chat", () => {
     threadId = crypto.randomUUID();
-    sessionStorage.setItem("stride_thread_id", threadId);
+    if (!googleIdToken) {
+        window.dispatchEvent(new Event("stride:authentication-required"));
+    }
+});
+
+window.addEventListener("stride:load-chat", (event) => {
+    const detail = (event as CustomEvent<{ chatId?: unknown }>).detail;
+    if (typeof detail?.chatId !== "string" || !googleIdToken) {
+        appendMessage("error", "Sign in before opening a saved chat.");
+        return;
+    }
+
+    void loadChat(detail.chatId, googleIdToken).catch((error: unknown) => {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Unable to open chat:", error);
+        appendMessage("error", `Unable to open chat: ${message}`);
+    });
 });
 
 function appendMessage(role: "user" | "assistant" | "error", text: string): void {
@@ -32,6 +69,89 @@ function appendMessage(role: "user" | "assistant" | "error", text: string): void
     message.className = `chat-message ${role}-message`;
     message.textContent = text;
     messageContainer.appendChild(message);
+}
+
+function isChatSummary(value: unknown): value is ChatSummary {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+    const chat = value as Record<string, unknown>;
+    return typeof chat.chat_id === "string" && typeof chat.title === "string";
+}
+
+function isChatDetails(value: unknown): value is ChatDetails {
+    if (!isChatSummary(value)) {
+        return false;
+    }
+    return (
+        "messages" in value &&
+        Array.isArray(value.messages) &&
+        value.messages.every(isChatMessage)
+    );
+}
+
+function isChatMessage(value: unknown): value is ChatMessage {
+    if (typeof value !== "object" || value === null) {
+        return false;
+    }
+
+    return (
+        "role" in value &&
+        (value.role === "user" || value.role === "assistant") &&
+        "content" in value &&
+        typeof value.content === "string"
+    );
+}
+
+async function refreshChatHistory(): Promise<void> {
+    if (!googleIdToken) {
+        return;
+    }
+
+    const response = await fetch("http://127.0.0.1:8002/chats", {
+        headers: { Authorization: `Bearer ${googleIdToken}` },
+    });
+    if (!response.ok) {
+        throw new Error(`History request returned ${response.status}.`);
+    }
+
+    const data: unknown = await response.json();
+    if (!Array.isArray(data) || !data.every(isChatSummary)) {
+        throw new Error("The chat history response was invalid.");
+    }
+
+    historyList.replaceChildren();
+    for (const chat of data) {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "history-item";
+        button.dataset.chatId = chat.chat_id;
+        button.textContent = chat.title;
+        item.appendChild(button);
+        historyList.appendChild(item);
+    }
+}
+
+async function loadChat(chatId: string, credential: string): Promise<void> {
+    const response = await fetch(
+        `http://127.0.0.1:8002/chats/${encodeURIComponent(chatId)}`,
+        { headers: { Authorization: `Bearer ${credential}` } },
+    );
+    if (!response.ok) {
+        throw new Error(`Chat request returned ${response.status}.`);
+    }
+
+    const data: unknown = await response.json();
+    if (!isChatDetails(data)) {
+        throw new Error("The saved chat response was invalid.");
+    }
+
+    threadId = data.chat_id;
+    messageContainer.replaceChildren();
+    for (const message of data.messages) {
+        appendMessage(message.role, message.content);
+    }
 }
 
 async function sendToBackend(
@@ -82,6 +202,11 @@ chatForm.addEventListener("submit", async (event) => {
         const reply = await sendToBackend(query, currentThreadId, credential);
         if (threadId === currentThreadId) {
             appendMessage("assistant", reply);
+            void refreshChatHistory().catch((error: unknown) => {
+                const message = error instanceof Error ? error.message : String(error);
+                console.error("Unable to refresh chat history:", error);
+                appendMessage("error", `Unable to refresh chat history: ${message}`);
+            });
         }
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
