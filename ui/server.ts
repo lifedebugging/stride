@@ -44,6 +44,7 @@ let threadId: string = crypto.randomUUID();
 window.addEventListener("pageshow", () => {
     messageContainer.replaceChildren();
     input.value = "";
+    resizeChatInput();
     threadId = crypto.randomUUID();
 });
 
@@ -211,6 +212,7 @@ chatForm.addEventListener("submit", async (event) => {
 
     appendMessage("user", query);
     input.value = "";
+    resizeChatInput();
     sendButton.disabled = true;
     const currentThreadId = threadId;
     const credential = googleIdToken;
