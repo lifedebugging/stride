@@ -30,6 +30,7 @@ toggleBtn.addEventListener('click', () => {
 newChatBtn.addEventListener('click', () => {
     chatMessages.replaceChildren();
     chatInput.value = '';
+    chatInput.dispatchEvent(new Event('input'));
     document.querySelector('.main-workspace')?.classList.remove('active-chat');
     window.dispatchEvent(new Event('stride:new-chat'));
     closeSidebar();
