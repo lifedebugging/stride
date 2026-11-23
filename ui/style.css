@@ -350,6 +350,7 @@ body {
     box-sizing: border-box;
     transform: scale(1);
     transition: transform 0.6s ease-in-out;
+    align-items: flex-end;
 }
 
 .mascot-toggle.open ~ .main-workspace .chat-input-area {
