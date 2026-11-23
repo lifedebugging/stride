@@ -8,6 +8,7 @@ from psycopg import AsyncConnection
 from psycopg.rows import DictRow, dict_row
 from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from backend.chat_history import setup_chat_history
 from config.model_config import model_endpoint, MODEL_MAP
 from langchain.agents import create_agent
 from prompt.system_prompt import ReadOnly
@@ -41,7 +42,7 @@ async def lifespan(app: FastAPI):
     if not db_url:
         raise RuntimeError("DB_URL must be configured before starting the application.")
 
-    pool = AsyncConnectionPool(     
+    pool: AsyncConnectionPool[AsyncConnection[DictRow]] = AsyncConnectionPool(
         db_url,
         name="Pool-connection",
         kwargs={"row_factory": dict_row},    #improves how i can access database row[id] instead row[0]
@@ -59,7 +60,9 @@ async def lifespan(app: FastAPI):
         
         # Create checkpointer with pool (connection stays alive via pool)
         checkpointer = AsyncPostgresSaver(conn=pool)  # type: ignore
+        await checkpointer.setup()
         log.info("checkpointer connection successful")
+        await setup_chat_history(pool)
 
         tools = await tool_call()
         tools.append(rag_tool())
