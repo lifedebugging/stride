@@ -64,6 +64,7 @@ function appendMessage(role, text) {
     message.className = `chat-message ${role}-message`;
     message.textContent = text;
     messageContainer.appendChild(message);
+    messageContainer.scrollTop = messageContainer.scrollHeight;
     if (role !== "error")
         document.querySelector(".main-workspace")?.classList.add("active-chat");
 }
