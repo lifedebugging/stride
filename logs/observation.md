@@ -1151,17 +1151,18 @@ turns the JavaScript object into the text format the proxy expects.
 the browser talks to port 8002 because that is where the proxy is listening.
 the proxy itself forwards the request to port 8001/route.
 
-async means this function has to wait for web requests. await means "wait for
-this step to finish, then continue." Promise<string> means sendToBackend will
-eventually provide text, after the request finishes.
+async means this function can wait for web requests. await means "wait for
+this step to finish, then continue." sendToBackend reads the response body a
+piece at a time and sends each decoded text piece to the page through onChunk.
 
 response.ok means the proxy returned a successful HTTP status. if it did not,
-the code reads the error text and raises an error. on success, response.text()
-gets the answer as plain text. it is not JSON.
+the code reads the error text and raises an error. for a successful response,
+response.body.getReader() reads the stream, and TextDecoder turns the received
+bytes into text.
 
-the proxy can send the answer as a stream, but this page currently waits for
-the whole answer before showing it. showing each piece while it arrives
-would be a later improvement.
+the Python proxy forwards response pieces from the backend using
+iter_content(chunk_size=1). the page creates one assistant message and adds
+text to it as pieces arrive.
 
 ### connect Send to the request
 
@@ -1267,4 +1268,12 @@ i also added auto scroll the feed to latest message like outher ai ui's
 the end to end system is working however the streaming is not taking place more like it happening in backend but not to the front end 
 
 still no browser caching so that stuff idk how am i gonna do it, it feels like too much at this point
+
+## 2026-11-23 — Streaming chat responses
+
+- The backend was already yielding model output, but the page waited for the full response before showing it.
+- The browser now reads the response stream and updates one assistant message as text arrives.
+- The Python proxy forwards small response pieces with `iter_content(chunk_size=1)`.
+- Added a 40 ms delay between displayed characters for a terminal-style typing effect. This delay is only in the UI.
+- Validation: `npm run build:ui` passed. Reload the page and test the effect with the backend and proxy running.
 
