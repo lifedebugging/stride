@@ -63,7 +63,7 @@ def proxy_history_request(path: str, authorization: str | None):
 def stream_response(upstream_response: requests.Response):
     start = time.perf_counter()
     try:
-        for chunk in upstream_response.iter_content(chunk_size=None):
+        for chunk in upstream_response.iter_content(chunk_size=1):
             if chunk:
                 yield chunk
         log.info("response complete, %.2f", time.perf_counter() - start)
