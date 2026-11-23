@@ -252,6 +252,7 @@ body {
 }
 
 .chat-message {
+    font-size: 0.95rem;
     margin: 0.5rem 0;
     color: #1F3323;
     white-space: pre-wrap;
@@ -259,6 +260,7 @@ body {
 }
 
 .user-message {
+    
     text-align: right;
 }
 
