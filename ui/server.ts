@@ -88,15 +88,21 @@ window.addEventListener("stride:load-chat", (event) => {
     });
 });
 
-function appendMessage(role: "user" | "assistant" | "error", text: string): void {
+function appendMessage(
+    role: "user" | "assistant" | "error",
+    text: string,
+): HTMLParagraphElement {
     const message = document.createElement("p");
     message.className = `chat-message ${role}-message`;
     message.textContent = text;
     messageContainer.appendChild(message);
     messageContainer.scrollTop = messageContainer.scrollHeight;
 
-    if(role!=="error")
+    if (role !== "error") {
         document.querySelector(".main-workspace")?.classList.add("active-chat");
+    }
+
+    return message;
 }
 
 function isChatSummary(value: unknown): value is ChatSummary {
@@ -186,7 +192,8 @@ async function sendToBackend(
     userMessage: string,
     currentThreadId: string,
     credential: string,
-): Promise<string> {
+    onChunk: (chunk: string) => void,
+): Promise<void> {
     const response = await fetch("http://127.0.0.1:8002/chat", {
         method: "POST",
         headers: {
@@ -204,7 +211,25 @@ async function sendToBackend(
         throw new Error(`Proxy returned ${response.status}: ${detail}`);
     }
 
-    return response.text();
+
+    const reader = response.body?.getReader();
+    if (!reader) throw new Error("Response has no readable body.");
+
+    const decoder = new TextDecoder();
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        if (chunk) {
+            onChunk(chunk);
+        }
+    }
+
+    const finalChunk = decoder.decode();
+    if (finalChunk) {
+        onChunk(finalChunk);
+    }
 }
 
 chatForm.addEventListener("submit", async (event) => {
@@ -228,9 +253,28 @@ chatForm.addEventListener("submit", async (event) => {
     const credential = googleIdToken;
 
     try {
-        const reply = await sendToBackend(query, currentThreadId, credential);
+        let assistantMessage: HTMLParagraphElement | null = null;
+        await sendToBackend(
+            query,
+            currentThreadId,
+            credential,
+            (chunk) => {
+                if (threadId !== currentThreadId) {
+                    return;
+                }
+
+                if (!assistantMessage) {
+                    assistantMessage = appendMessage("assistant", "");
+                }
+                assistantMessage.textContent += chunk;
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            },
+        );
+
         if (threadId === currentThreadId) {
-            appendMessage("assistant", reply);
+            if (!assistantMessage) {
+                appendMessage("assistant", "");
+            }
             void refreshChatHistory().catch((error: unknown) => {
                 console.error("Unable to refresh chat history:", error);
             });
