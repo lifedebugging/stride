@@ -1,4 +1,5 @@
 import time
+from urllib.parse import quote
 
 import requests
 from config.logging_handler import get_logger
@@ -24,6 +25,39 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     query: str
     thread_id: str
+
+
+def proxy_history_request(path: str, authorization: str | None):
+    upstream_response = None
+    try:
+        upstream_response = requests.get(
+            f"http://127.0.0.1:8001{path}",
+            headers={"Authorization": authorization} if authorization else {},
+            timeout=(5, 30),
+        )
+        if upstream_response.status_code in (401, 404, 503):
+            status_code = upstream_response.status_code
+            raise HTTPException(
+                status_code=status_code,
+                detail={
+                    401: "Google sign-in is required or has expired.",
+                    404: "Chat not found.",
+                    503: "Google sign-in is temporarily unavailable.",
+                }[status_code],
+            )
+        upstream_response.raise_for_status()
+        return upstream_response.json()
+    except HTTPException:
+        raise
+    except requests.RequestException as exc:
+        log.exception("chat history request failed")
+        raise HTTPException(
+            status_code=502,
+            detail="Backend service unavailable",
+        ) from exc
+    finally:
+        if upstream_response is not None:
+            upstream_response.close()
 
 
 def stream_response(upstream_response: requests.Response):
@@ -80,4 +114,20 @@ def chat_endpoint(
     return StreamingResponse(
         stream_response(upstream_response),
         media_type="text/plain",
+    )
+
+
+@app.get("/chats")
+def list_chats(authorization: str | None = Header(default=None)):
+    return proxy_history_request("/chats", authorization)
+
+
+@app.get("/chats/{chat_id}")
+def get_chat(
+    chat_id: str,
+    authorization: str | None = Header(default=None),
+):
+    return proxy_history_request(
+        f"/chats/{quote(chat_id, safe='')}",
+        authorization,
     )
