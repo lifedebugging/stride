@@ -232,7 +232,6 @@ chatForm.addEventListener("submit", async (event) => {
         if (threadId === currentThreadId) {
             appendMessage("assistant", reply);
             void refreshChatHistory().catch((error: unknown) => {
-                const message = error instanceof Error ? error.message : String(error);
                 console.error("Unable to refresh chat history:", error);
             });
         }
