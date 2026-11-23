@@ -10,6 +10,7 @@ if (!chatForm || !chatInput || !sendButton || !chatMessages || !chatHistoryList)
     throw new Error("Chat form elements are missing from the page.");
 }
 const historyList = chatHistoryList;
+const input = chatInput;
 
 interface ChatSummary {
     chat_id: string;
@@ -26,12 +27,23 @@ interface ChatDetails extends ChatSummary {
 }
 
 const messageContainer = chatMessages;
+
+function resizeChatInput(): void {
+    input.style.height = "auto";
+    const maxHeight = Number.parseFloat(getComputedStyle(input).maxHeight);
+    input.style.height = `${Math.min(input.scrollHeight, maxHeight)}px`;
+    input.style.overflowY =
+        input.scrollHeight > maxHeight ? "auto" : "hidden";
+}
+
+input.addEventListener("input", resizeChatInput);
 let googleIdToken: string | null = null;
 let threadId: string = crypto.randomUUID();
 
+
 window.addEventListener("pageshow", () => {
     messageContainer.replaceChildren();
-    chatInput.value = "";
+    input.value = "";
     threadId = crypto.randomUUID();
 });
 
@@ -187,7 +199,7 @@ async function sendToBackend(
 chatForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const query = chatInput.value.trim();
+    const query = input.value.trim();
     if (!query) {
         return;
     }
@@ -198,7 +210,7 @@ chatForm.addEventListener("submit", async (event) => {
     }
 
     appendMessage("user", query);
-    chatInput.value = "";
+    input.value = "";
     sendButton.disabled = true;
     const currentThreadId = threadId;
     const credential = googleIdToken;
@@ -221,6 +233,7 @@ chatForm.addEventListener("submit", async (event) => {
         }
     } finally {
         sendButton.disabled = false;
-        chatInput.focus();
+        input.focus();
     }
 });
+
