@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import os
+from dataclasses import dataclass
 
 from fastapi import HTTPException
 from google.auth.exceptions import TransportError
@@ -13,11 +14,17 @@ DEFAULT_GOOGLE_CLIENT_ID = (
 logger = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True)
+class GoogleIdentity:
+    subject: str
+    email: str
+
+
 def user_scoped_thread_id(subject: str, thread_id: str) -> str:
     return hashlib.sha256(f"{subject}:{thread_id}".encode("utf-8")).hexdigest()
 
 
-def verify_google_credential(authorization: str | None) -> str:
+def verify_google_credential(authorization: str | None) -> GoogleIdentity:
     parts = authorization.split() if authorization else []
     if len(parts) != 2 or parts[0].lower() != "bearer":
         raise HTTPException(
@@ -54,11 +61,18 @@ def verify_google_credential(authorization: str | None) -> str:
         ) from exc
 
     subject = claims.get("sub")
-    if not isinstance(subject, str) or not subject:
+    email = claims.get("email")
+    if (
+        not isinstance(subject, str)
+        or not subject
+        or not isinstance(email, str)
+        or not email
+        or claims.get("email_verified") is not True
+    ):
         raise HTTPException(
             status_code=401,
             detail="Google sign-in is invalid or expired.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return subject
+    return GoogleIdentity(subject=subject, email=email)
