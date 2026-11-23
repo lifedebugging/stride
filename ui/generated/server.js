@@ -20,6 +20,13 @@ function resizeChatInput() {
 input.addEventListener("input", resizeChatInput);
 let googleIdToken = null;
 let threadId = crypto.randomUUID();
+input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+        return;
+    }
+    event.preventDefault();
+    chatForm.requestSubmit();
+});
 window.addEventListener("pageshow", () => {
     messageContainer.replaceChildren();
     input.value = "";
