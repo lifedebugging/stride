@@ -3,9 +3,9 @@ const drawer = document.getElementById('sidebar-drawer');
 const newChatBtn = document.querySelector('.new-chat-btn');
 const chatMessages = document.querySelector('.chat-messages');
 const chatInput = document.querySelector('.chat-input');
+const chatHistoryList = document.querySelector('.chat-history-list');
 const newChatDialog = document.getElementById('new-chat-dialog');
 const closeDialogBtn = document.querySelector('.dialog-close-btn');
-const historyItems = document.querySelectorAll('.history-item');
 let mascotTurnTimer;
 
 if (
@@ -14,6 +14,7 @@ if (
     !(newChatBtn instanceof HTMLButtonElement) ||
     !(chatMessages instanceof HTMLElement) ||
     !(chatInput instanceof HTMLInputElement) ||
+    !(chatHistoryList instanceof HTMLUListElement) ||
     !(newChatDialog instanceof HTMLDialogElement) ||
     !(closeDialogBtn instanceof HTMLButtonElement)
 ) {
@@ -32,7 +33,6 @@ newChatBtn.addEventListener('click', () => {
     document.querySelector('.main-workspace')?.classList.remove('active-chat');
     window.dispatchEvent(new Event('stride:new-chat'));
     closeSidebar();
-    newChatDialog.showModal();
 });
 
 closeDialogBtn.addEventListener('click', () => newChatDialog.close());
@@ -72,12 +72,17 @@ function setSidebarOpen(isOpen) {
     toggleBtn.classList.add('running');
 }
 
-// Automatically close the sidebar when selecting any chat history item
-historyItems.forEach(item => {
-    item.addEventListener('click', () => {
-        // ...logic to load selected chat...
+chatHistoryList.addEventListener('click', event => {
+    if (!(event.target instanceof Element)) {
+        return;
+    }
+
+    const historyButton = event.target.closest('button.history-item');
+    const chatId = historyButton?.getAttribute('data-chat-id');
+    if (chatId) {
+        window.dispatchEvent(new CustomEvent('stride:load-chat', { detail: { chatId } }));
         closeSidebar();
-    });
+    }
 });
 
 toggleBtn.addEventListener('transitionend', event => {
