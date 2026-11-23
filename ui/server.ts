@@ -71,6 +71,9 @@ function appendMessage(role: "user" | "assistant" | "error", text: string): void
     message.className = `chat-message ${role}-message`;
     message.textContent = text;
     messageContainer.appendChild(message);
+
+    if(role!=="error")
+        document.querySelector(".main-workspace")?.classList.add("active-chat");
 }
 
 function isChatSummary(value: unknown): value is ChatSummary {
