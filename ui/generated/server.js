@@ -20,7 +20,6 @@ window.addEventListener("stride:authenticated", (event) => {
     void refreshChatHistory().catch((error) => {
         const message = error instanceof Error ? error.message : String(error);
         console.error("Unable to load chat history:", error);
-        appendMessage("error", `Unable to load chat history: ${message}`);
     });
 });
 window.addEventListener("stride:new-chat", () => {
@@ -158,7 +157,7 @@ chatForm.addEventListener("submit", async (event) => {
         const message = error instanceof Error ? error.message : String(error);
         console.error("Chat request failed:", error);
         if (threadId === currentThreadId) {
-            appendMessage("error", `Chat request failed: ${message}`);
+            appendMessage("error", "Chat request failed. Please try again later");
         }
     }
     finally {
