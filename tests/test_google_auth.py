@@ -21,13 +21,18 @@ def test_google_credential_verification_returns_subject_and_checks_audience(
 
     def fake_verify(token, request, audience):
         verified.update(token=token, audience=audience)
-        return {"sub": "google-user-123"}
+        return {
+            "sub": "google-user-123",
+            "email": "user@example.com",
+            "email_verified": True,
+        }
 
     monkeypatch.setattr(google_auth, "verify_oauth2_token", fake_verify)
 
     subject = google_auth.verify_google_credential("Bearer signed-token")
 
-    assert subject == "google-user-123"
+    assert subject.subject == "google-user-123"
+    assert subject.email == "user@example.com"
     assert verified == {
         "token": "signed-token",
         "audience": "configured-client-id",
@@ -107,3 +112,34 @@ def test_chat_proxy_forwards_bearer_token_and_preserves_auth_rejection(monkeypat
 
     assert response.status_code == 401
     assert calls[0]["headers"] == {"Authorization": "Bearer signed-token"}
+
+
+def test_chat_history_proxy_forwards_bearer_token(monkeypatch):
+    calls = []
+
+    class HistoryResponse:
+        status_code = 200
+
+        def json(self):
+            return [{"chat_id": "chat-1", "title": "My chat"}]
+
+        def raise_for_status(self):
+            pass
+
+        def close(self):
+            pass
+
+    monkeypatch.setattr(
+        client_module.requests,
+        "get",
+        lambda url, **kwargs: calls.append((url, kwargs)) or HistoryResponse(),
+    )
+    response = TestClient(client_module.app).get(
+        "/chats",
+        headers={"Authorization": "Bearer signed-token"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == [{"chat_id": "chat-1", "title": "My chat"}]
+    assert calls[0][0] == "http://127.0.0.1:8001/chats"
+    assert calls[0][1]["headers"] == {"Authorization": "Bearer signed-token"}
