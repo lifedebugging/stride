@@ -1210,3 +1210,13 @@ loaded. if the request fails, check that both Python servers are running.
 as of today we have working ui job resume building starts now
 
 and lastly setting up chat persistence to browse with auth
+
+## 2026-11-22 — Chat history persistence
+
+- The sidebar had sample entries only; messages were not restored after leaving the page.
+- Added PostgreSQL tables for Google users, their chats, and each chat's messages.
+- Kept chat-history SQL and list/load routes in `backend/chat_history.py` to keep `main/agent.py` focused.
+- The sidebar now loads saved chats after sign-in and opens a selected chat.
+- The backend validates the Google ID token; it stores the stable Google user ID and email, never the token.
+- PostgreSQL checkpoint tables and chat-history tables are initialized during backend startup.
+- Validation: 8 focused tests, `npm run build:ui`, and a browser test with mocked API responses passed. A live Google/PostgreSQL connection was not tested.
