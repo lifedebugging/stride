@@ -1,7 +1,9 @@
 import re
 import json
+import os
 import unicodedata
 import numpy as np
+import psutil
 from typing import Any
 import torch
 from typing import List, Dict, Tuple
@@ -20,6 +22,16 @@ from config.logging_handler import get_logger
 import time
 
 log = get_logger("router logic")
+_memory_process = psutil.Process(os.getpid())
+_first_reranker_memory_checkpoint = False
+
+
+def memory_checkpoint(label: str) -> None:
+    rss_mb = _memory_process.memory_info().rss / (1024 * 1024)
+    log.info(f"Memory checkpoint: {label}: {rss_mb:.1f} MB RSS")
+
+
+memory_checkpoint("after imports, before models")
 
 """
 This is a json file used as a dataset
@@ -53,6 +65,7 @@ try:
     embeddings = HuggingFaceEmbeddings(
         model="all-MiniLM-L6-V2"
         )
+    memory_checkpoint("after MiniLM embedding model")
     
 except Exception as e:
     log.exception(f"HuggingFaceEmbedding model failure:{e}")
@@ -63,8 +76,11 @@ except Exception as e:
 A Cross encoder model used after retrieval as a scoring system
 """
 try:
-    encoder_model = CrossEncoder("BAAI/bge-reranker-v2-m3",
-                                model_kwargs={"torch_dtype": torch.float32}) # BAAI/bge-reranker-v2-m3 OR all-MiniLM-L6-v2
+    encoder_model = CrossEncoder(
+        "cross-encoder/ms-marco-TinyBERT-L2-v2",
+        model_kwargs={"torch_dtype": torch.float32},
+    )
+    memory_checkpoint("after TinyBERT reranker")
 except ValueError as e:
     log.exception(f"Cross Encoder model failed to load: {e}")
 
@@ -97,6 +113,7 @@ try:
         documents, 
         embeddings,
         )
+    memory_checkpoint("after vector store")
 except Exception as e:
     log.exception(f"vector store build failed {e}")
     raise
@@ -315,6 +332,7 @@ cats  = [c for _, c in examples]
 emb_matrix = np.array(embeddings.embed_documents(texts))
 emb_matrix /= np.linalg.norm(emb_matrix, axis=1, keepdims=True) 
 cat_array = np.array(cats)
+memory_checkpoint("after embedding matrix")
 
 GAP_MIN_COSINE = 0.20   # starting guess for MiniLM cosines — replace with calibrated value
 GAP_MIN_RANKER = 0.15
@@ -352,6 +370,10 @@ def stage2_rerank(query: str, sims: np.ndarray, ranked) -> List[Dict[str, Any]]:
     
            
     rerank_scores = encoder_model.predict(pairs)   # your existing model, logit scale
+    global _first_reranker_memory_checkpoint
+    if not _first_reranker_memory_checkpoint:
+        memory_checkpoint("after first reranker prediction")
+        _first_reranker_memory_checkpoint = True
     
     end = time.perf_counter()
     duration = end - start
