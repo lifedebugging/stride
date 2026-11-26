@@ -35,5 +35,5 @@ dependencies = [
     "stopwords>=1.0.2",
     "structlog>=26.1.0",
     "pgvector==0.5.1",
-    
+    "psutil>=7.2.2",
 ]
