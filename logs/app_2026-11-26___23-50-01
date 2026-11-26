@@ -1,0 +1,13 @@
+{"event": "Memory checkpoint: after imports, before models: 525.6 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T18:20:26.317008Z"}
+{"event": "Memory checkpoint: after MiniLM embedding model: 635.2 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T18:20:29.468454Z"}
+{"event": "Memory checkpoint: after TinyBERT reranker: 657.9 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T18:20:30.744628Z"}
+{"event": "Memory checkpoint: after vector store: 710.2 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T18:20:44.198804Z"}
+{"event": "Memory checkpoint: after embedding matrix: 731.3 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T18:20:58.589319Z"}
+{"event": "Db connection starting up..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 39, "level": "info", "timestamp": "2026-11-26T18:20:58.612070Z"}
+{"event": "connection pool status: open", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 59, "level": "info", "timestamp": "2026-11-26T18:20:58.613072Z"}
+{"event": "checkpointer connection successful", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 64, "level": "info", "timestamp": "2026-11-26T18:20:58.789339Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-26T18:21:03.371317Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-26T18:21:03.612478Z"}
+{"event": "loading language model..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 88, "level": "info", "timestamp": "2026-11-26T18:21:03.616442Z"}
+{"event": "checkpointer connection shutting down..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 107, "level": "info", "timestamp": "2026-11-26T20:11:14.415783Z"}
+{"event": "connection pool status: closed", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 111, "level": "info", "timestamp": "2026-11-26T20:11:14.439121Z"}
