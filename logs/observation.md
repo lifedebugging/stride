@@ -1277,3 +1277,13 @@ still no browser caching so that stuff idk how am i gonna do it, it feels like t
 - Added a 40 ms delay between displayed characters for a terminal-style typing effect. This delay is only in the UI.
 - Validation: `npm run build:ui` passed. Reload the page and test the effect with the backend and proxy running.
 
+## 2026-11-26 — Reranker memory comparison
+
+- Switched the stage-two reranker from `BAAI/bge-reranker-v2-m3` to `cross-encoder/ms-marco-TinyBERT-L2-v2` for a local resource/quality comparison.
+- Kept `all-MiniLM-L6-v2` as the first-stage embedding model; it was not replaced.
+- Measure process memory and routing quality on the same query set before comparing models.
+
+- Added temporary RSS checkpoints after imports, each model load, vector-store and embedding-matrix creation, and the first reranker prediction.
+- The checkpoints use `psutil` to report the current worker process's resident memory; remove the helper and calls after collecting measurements.
+- Next comparison: switched the stage-two reranker to `cross-encoder/ms-marco-MiniLM-L2-v2`; keep the same query set and measurement steps.
+
