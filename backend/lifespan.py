@@ -2,7 +2,7 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any
 from fastapi import FastAPI, Request
-from fasttext import load_model   
+from fasttext import load_model    # type: ignore[attr-defined]
 from pydantic import BaseModel, ConfigDict
 from psycopg import AsyncConnection
 from psycopg.rows import DictRow, dict_row
