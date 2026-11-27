@@ -1,3 +1,4 @@
+# BENCHMARK
 ```
 {'intent': 'GREETINGS', 'name': 'Greetings & Salutations', 'model': 'Fast', 'tool': None, 'priority': 1, 'match': 'hey', 'exact': False}
 {"event": "Memory checkpoint: after imports, before models: 527.1 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-26T20:16:11.606392Z"}
