@@ -1323,7 +1323,20 @@ loaded: (('__label__en',), array([0.17635809]))
 
 What fixed it was ~ downgrading the numpy<2.0.0
 
-`It was a package conflict` ~ fixed
+`It was a package conflict` ~ fixed which resolves the NumPy 2.x np.array(probs, copy=False)
+
+# observation
+
+Ran into another conflict because I downgrated the numpy
+
+now the scipy is acting up
+```
+UserWarning: A NumPy version >=2.0.0 and <2.8.0 is required for this version of SciPy (detected version 1.26.4)
+  from scipy.stats import fisher_exac
+```
+
+current action - downgrading `scipy` to match the numpy supported version
+
 
 
 
