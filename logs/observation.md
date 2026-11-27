@@ -1277,8 +1277,6 @@ still no browser caching so that stuff idk how am i gonna do it, it feels like t
 - Added a 40 ms delay between displayed characters for a terminal-style typing effect. This delay is only in the UI.
 - Validation: `npm run build:ui` passed. Reload the page and test the effect with the backend and proxy running.
 
-<<<<<<< Updated upstream
-=======
 ## 2026-11-26 — Reranker memory comparison
 
 - Switched the stage-two reranker from `BAAI/bge-reranker-v2-m3` to `cross-encoder/ms-marco-TinyBERT-L2-v2` for a local resource/quality comparison.
@@ -1302,4 +1300,32 @@ To continue using MCPserverClient and langchain-mcp-adapters you gotta stick to 
 decision - i am not migrating right now to MCPAdapter 
 that is for ~future-changes 
 focusing on solving fasttextwheel, load_model error
->>>>>>> Stashed changes
+
+# observation
+
+load_model error is fixed
+
+it was my pylance typechecker however it was importing successfully under fast-wheel lib
+
+(stride-venv) PS D:\Documents\stride> d:\Documents\stride_venv\.venv\Scripts\python.exe -c "import os, fasttext; p = r'D:\Documents\Stride\utils\lid.176.ftz'; print('exists:', os.path.exists(p), 'size:', os.path.getsize(p) if os.path.exists(p) else 0); m = fasttext.load_model(p); print('loaded:', m.predict('hello world'))"
+exists: True size: 938013
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 228, in predict
+    return labels, np.array(probs, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unable to avoid copy while creating an array as requested.
+If using `np.array(obj, copy=False)` replace it with `np.asarray(obj)` to allow a copy when needed (no behavior change in NumPy 1.x).
+For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#adapting-to-changes-in-the-copy-keyword.
+(stride-venv) PS D:\Documents\stride> d:\Documents\stride_venv\.venv\Scripts\python.exe -c "import os, fasttext; p = r'D:\Documents\Stride\utils\lid.176.ftz'; print('exists:', os.path.exists(p), 'size:', os.path.getsize(p) if os.path.exists(p) else 0); m = fasttext.load_model(p); print('loaded:', m.predict('hello world'))"
+exists: True size: 938013
+loaded: (('__label__en',), array([0.17635809]))
+
+What fixed it was ~ downgrading the numpy<2.0.0
+
+`It was a package conflict` ~ fixed
+
+
+
+
+
