@@ -1287,3 +1287,6 @@ still no browser caching so that stuff idk how am i gonna do it, it feels like t
 - The checkpoints use `psutil` to report the current worker process's resident memory; remove the helper and calls after collecting measurements.
 - Next comparison: switched the stage-two reranker to `cross-encoder/ms-marco-MiniLM-L2-v2`; keep the same query set and measurement steps.
 
+# obesrvation
+
+next is comparing models via small set of queries and dummy code
