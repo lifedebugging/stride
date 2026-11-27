@@ -77,10 +77,10 @@ A Cross encoder model used after retrieval as a scoring system
 """
 try:
     encoder_model = CrossEncoder(
-        "cross-encoder/ms-marco-MiniLM-L4-v2",
+        "Alibaba-NLP/gte-reranker-modernbert-base",
         model_kwargs={"torch_dtype": torch.float32},
     )
-    memory_checkpoint("after MiniLM-L4 cross-encoder reranker")
+    memory_checkpoint("after Gte cross-encoder reranker")
 except ValueError as e:
     log.exception(f"Cross Encoder model failed to load: {e}")
 
