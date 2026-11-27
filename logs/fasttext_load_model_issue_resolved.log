@@ -17,3 +17,7 @@ For more details, see https://numpy.org/devdocs/numpy_2_0_migration_guide.html#a
 (stride-venv) PS D:\Documents\stride> d:\Documents\stride_venv\.venv\Scripts\python.exe -c "import os, fasttext; p = r'D:\Documents\Stride\utils\lid.176.ftz'; print('exists:', os.path.exists(p), 'size:', os.path.getsize(p) if os.path.exists(p) else 0); m = fasttext.load_model(p); print('loaded:', m.predict('hello world'))"
 exists: True size: 938013
 loaded: (('__label__en',), array([0.17635809]))
+
+# resolved
+
+Downgrade numpy to below version > 2.0.0 that resolves the package conflict and load_model works successfully
