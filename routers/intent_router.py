@@ -77,10 +77,10 @@ A Cross encoder model used after retrieval as a scoring system
 """
 try:
     encoder_model = CrossEncoder(
-        "BAAI/bge-reranker-v2-m3",
+        "cross-encoder/ms-marco-MiniLM-L2-v2",
         model_kwargs={"torch_dtype": torch.float32},
     )
-    memory_checkpoint("after BGE reranker")
+    memory_checkpoint("after MiniLM-L2 cross-encoder reranker")
 except ValueError as e:
     log.exception(f"Cross Encoder model failed to load: {e}")
 
