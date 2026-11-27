@@ -1,0 +1,11 @@
+{"event": "Memory checkpoint: after imports, before models: 522.8 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T09:51:27.576035Z"}
+{"event": "Memory checkpoint: after MiniLM embedding model: 632.2 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T09:51:31.665971Z"}
+{"event": "Memory checkpoint: after BGE reranker: 2712.3 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T09:52:47.588965Z"}
+{"event": "Memory checkpoint: after vector store: 2689.7 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T09:53:02.043420Z"}
+{"event": "Memory checkpoint: after embedding matrix: 2710.3 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T09:53:15.825786Z"}
+{"event": "Db connection starting up..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 39, "level": "info", "timestamp": "2026-11-27T09:53:15.879190Z"}
+{"event": "connection pool status: open", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 59, "level": "info", "timestamp": "2026-11-27T09:53:15.879190Z"}
+{"event": "checkpointer connection successful", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 64, "level": "info", "timestamp": "2026-11-27T09:53:16.406879Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-27T09:53:22.910560Z"}
+{"event": "creating agent..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 78, "level": "info", "timestamp": "2026-11-27T09:53:23.202975Z"}
+{"event": "loading language model..", "filename": "lifespan.py", "func_name": "lifespan", "lineno": 88, "level": "info", "timestamp": "2026-11-27T09:53:23.205934Z"}
