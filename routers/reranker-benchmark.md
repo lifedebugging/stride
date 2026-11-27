@@ -84,6 +84,36 @@ Trained for Natural Language Inference(NLI), not passage reranker, it scores pai
 
 the card lists `0.1 B` parameters at FP32, around `400 MB` of weights alone, before inference overhead the whole worker can end up above `1 GB` (assuming)
 
-HOWEVER it returns three scores per pair unlike *one relevance score*, it fits the intent classificatino more conceptually than the MS MACRO models but again the RAM constraint has to be considered as well.
+HOWEVER it returns three scores per pair unlike *one relevance score*, it fits the intent classification more conceptually than the MS MACRO models but again the RAM constraint has to be considered and that I would have to spend time migrating and adapt to three pair 
+
+`Alibaba-NLP/gte-reranker-modernbert-base`
+This one could be a potential candidate even though it has `149 M` parameters
+
+it is english only (not a trade off for me), it's a **proper cross encoder reranker** and more direct fit than the NLI meaning just change the model name and it works
+
+Its 8,192-token context is also more than short intent examples needs.
+
+The card reports BEIR 56.19, LoCo 90.68, and CoIR 79.99, but those are general retrieval benchmarks.
+
+```
+{'intent': 'GREETINGS', 'name': 'Greetings & Salutations', 'model': 'Fast', 'tool': None, 'priority': 1, 'match': 'hey', 'exact': False}
+{"event": "Memory checkpoint: after imports, before models: 522.3 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T11:29:27.435389Z"}
+Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 852.34it/s]
+{"event": "Memory checkpoint: after MiniLM embedding model: 632.3 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T11:29:32.030386Z"}
+config.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████| 1.33k/1.33k [00:00<?, ?B/s]
+model.safetensors: downloading bytes: ████████████████████████████████████████████████████████████████████████████████████|  419MB, 2.72MB/s  
+model.safetensors: reconstructing file: 100%|████████████████████████████████████████████████████████████████████|  598MB /  598MB, 6.29MB/s  
+Loading weights: 100%|█████████████████████████████████████████████████████████████████████████████████████| 138/138 [00:00<00:00, 144.20it/s]
+tokenizer_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████| 21.0k/21.0k [00:00<?, ?B/s]
+tokenizer.json: 100%|████████████████████████████████████████████████████████████████████████████████████| 3.58M/3.58M [00:00<00:00, 6.68MB/s]
+special_tokens_map.json: 100%|███████████████████████████████████████████████████████████████████████████████████████| 694/694 [00:00<?, ?B/s]
+{"event": "Memory checkpoint: after MiniLM-L4 cross-encoder reranker: 1224.2 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T11:33:16.487417Z"}
+{"event": "Memory checkpoint: after vector store: 1271.9 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T11:33:26.911217Z"}
+{"event": "Memory checkpoint: after embedding matrix: 1294.4 MB RSS", "filename": "intent_router.py", "func_name": "memory_checkpoint", "lineno": 31, "level": "info", "timestamp": "2026-11-27T11:33:39.036258Z"}
+```
+
+The RAM does goes upto `1300 MB` which is well again does not align with my RAM constraint issue
+
+HOWEVER I m going to write a simple function to check all accuracy and latency based on that i will decide whether it is a good replacement of MACRO models.
 
 
