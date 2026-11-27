@@ -1,0 +1,19 @@
+
+D:\Documents\stride_venv\.venv\Lib\site-packages\nltk\metrics\association.py:26: UserWarning: A NumPy version >=2.0.0 and <2.8.0 is required for this version of SciPy (detected version 1.26.4)
+  from scipy.stats import fisher_exact
+D:\Documents\stride_venv\.venv\Lib\site-packages\scipy\sparse\_sputils.py:17: FutureWarning: In the future `np.long` will be defined as the corresponding NumPy scalar.
+  np.uintc, np.long, np.ulong, np.longlong, np.ulonglong,
+D:\Documents\stride_venv\.venv\Lib\site-packages\scipy\sparse\_sputils.py:17: FutureWarning: In the future `np.long` will be defined as the corresponding NumPy scalar.
+  np.uintc, np.long, np.ulong, np.longlong, np.ulonglong,
+Process SpawnProcess-1:
+Traceback (most recent call last):
+
+# the error
+
+occurs due to downgrade of numpy below 2.0.0
+
+# solution 
+
+downgrade `scipy` to version 1.15 or below that supported numpy>2.0.0
+
+Issue resolved
