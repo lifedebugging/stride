@@ -70,3 +70,20 @@ SO I will be using `MiniLM-L2` it has significantly less memory foot print, fast
 # changes
 
 I will also be measuring how much **percentage** of query actually get downstream in all three cross encoders and compare the results.
+
+# alternatives
+
+`"zhiqing/Qwen3-Reranker-0.6B-seq-cls-ONNX"` 
+a ONNX based with `0.6 billion` parameters, at FP32 weights roughly `2.4 GB` it uses different formate for queries and documents 
+however it supports `100+` languages and long contexts
+
+BUT my ranker handles short intent examples and english only suffice for now, so it does not justify the extra memory
+
+`cross-encoder/nli-deberta-v3-small`
+Trained for Natural Language Inference(NLI), not passage reranker, it scores pairs as `contradiction, entailment or neutral`
+
+the card lists `0.1 B` parameters at FP32, around `400 MB` of weights alone, before inference overhead the whole worker can end up above `1 GB` (assuming)
+
+HOWEVER it returns three scores per pair unlike *one relevance score*, it fits the intent classificatino more conceptually than the MS MACRO models but again the RAM constraint has to be considered as well.
+
+
