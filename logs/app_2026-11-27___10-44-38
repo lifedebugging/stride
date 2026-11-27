@@ -1,0 +1,11 @@
+d:\Documents\stride_venv\.venv\Scripts\python.exe -c "import os, fasttext; p = r'path\to\lid.176.bin'; print('exists:', os.path.exists(p), 'size:', os.path.getsize(p) if os.path.exists(p) else 0); m = fasttext.load_model(p); print('loaded:', m.predict('hello world'))"
+
+exists: False size: 0
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 436, in load_model
+    return _FastText(model_path=path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Documents\stride_venv\.venv\Lib\site-packages\fasttext\FastText.py", line 94, in __init__
+    self.f.loadModel(model_path)
+ValueError: path\to\lid.176.bin cannot be opened for loading!
