@@ -22,12 +22,12 @@ from config.logging_handler import get_logger
 import time
 
 log = get_logger("router logic")
-_memory_process = psutil.Process(os.getpid())
 _first_reranker_memory_checkpoint = False
 
 
 def memory_checkpoint(label: str) -> None:
-    rss_mb = _memory_process.memory_info().rss / (1024 * 1024)
+    memory_process = psutil.Process(os.getpid())
+    rss_mb = memory_process.memory_info().rss / (1024 * 1024)
     log.info(f"Memory checkpoint: {label}: {rss_mb:.1f} MB RSS")
 
 
@@ -77,10 +77,10 @@ A Cross encoder model used after retrieval as a scoring system
 """
 try:
     encoder_model = CrossEncoder(
-        "cross-encoder/ms-marco-TinyBERT-L2-v2",
+        "BAAI/bge-reranker-v2-m3",
         model_kwargs={"torch_dtype": torch.float32},
     )
-    memory_checkpoint("after TinyBERT reranker")
+    memory_checkpoint("after BGE reranker")
 except ValueError as e:
     log.exception(f"Cross Encoder model failed to load: {e}")
 
